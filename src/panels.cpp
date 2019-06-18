@@ -1660,12 +1660,12 @@ static void draw_health_classic( avatar &u, const catacurses::window &w )
                                  ( strain <= 0.4 ? c_light_red : c_red ) );
             int t_speed = static_cast<int>( convert_velocity( veh->cruise_velocity, VU_VEHICLE ) );
             int c_speed = static_cast<int>( convert_velocity( veh->velocity, VU_VEHICLE ) );
-            int offset = get_int_digits( t_speed );
+            int offset = get_int_digits( c_speed );
             const std::string type = get_option<std::string>( "USE_METRIC_SPEEDS" );
             mvwprintz( w, point( 21, 5 ), c_light_gray, type );
             mvwprintz( w, point( 26, 5 ), col_vel, "%d", c_speed );
-            mvwprintz( w, point( 26 + offset, 5 ), c_light_gray, ">" );
-            mvwprintz( w, point( 28 + offset, 5 ), c_light_green, "%d", t_speed );
+            mvwprintz( w, point( 26 + offset, 5 ), c_light_gray, " > " );
+            mvwprintz( w, point( 28+1 + offset, 5 ), c_light_green, "%d", t_speed );
         }
     }
 
