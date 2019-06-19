@@ -1,0 +1,14 @@
+[
+  {
+    "type": "MOD_INFO",
+    "ident": "No_Flaming_Eyes",
+    "name": "No Flaming Eyes",
+    "description": "Removes flaming eyes from the game.",
+    "category": "monster_exclude",
+    "dependencies": [ "dda" ]
+  },
+  {
+    "type": "MONSTER_BLACKLIST",
+    "monsters": [ "mon_flaming_eye" ]
+  }
+]
