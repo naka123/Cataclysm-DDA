@@ -460,6 +460,7 @@ extern ter_id t_null,
        t_slime,
        t_bridge,
        t_covered_well,
+       t_guardrail,
        // Lighting related
        t_utility_light,
        // Walls

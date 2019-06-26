@@ -5076,7 +5076,8 @@ int iuse::oxytorch( player *p, item *it, bool, const tripoint & )
         t_door_metal_c,
         t_door_bar_c,
         t_door_bar_locked,
-        t_door_metal_pickable
+        t_door_metal_pickable,
+        t_guardrail
     };
     const std::set<furn_id> allowed_furn_id {
         f_rack,
@@ -5128,7 +5129,8 @@ int iuse::oxytorch( player *p, item *it, bool, const tripoint & )
         turns = to_turns<int>( 10_seconds );
     } else if( ter == t_door_metal_locked || ter == t_door_metal_c || ter == t_door_bar_c ||
                ter == t_door_bar_locked || ter == t_door_metal_pickable || furn == f_safe_l ||
-               furn == f_gunsafe_ml || furn == f_gunsafe_mj || furn == f_gun_safe_el ) {
+               furn == f_gunsafe_ml || furn == f_gunsafe_mj || furn == f_gun_safe_el ||
+               ter == t_door_metal_pickable || ter == t_guardrail ) {
         turns = to_turns<int>( 15_seconds );
     } else {
         return 0;

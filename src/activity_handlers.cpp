@@ -208,6 +208,8 @@ static const itype_id itype_mind_scan_robofac( "mind_scan_robofac" );
 static const itype_id itype_muscle( "muscle" );
 static const itype_id itype_nail( "nail" );
 static const itype_id itype_pipe( "pipe" );
+static const itype_id itype_rebar( "rebar" );
+static const itype_id itype_ruined_chunks( "ruined_chunks" );
 static const itype_id itype_scrap( "scrap" );
 static const itype_id itype_sheet_metal( "sheet_metal" );
 static const itype_id itype_spike( "spike" );
@@ -2349,6 +2351,11 @@ void activity_handlers::oxytorch_finish( player_activity *act, player *p )
         if( here.flammable_items_at( pos ) && rng( 1, 100 ) < 50 ) {
             here.add_field( pos, fd_fire, 1, 10_minutes );
         }
+    } else if ( ter == t_guardrail ) {
+        here.ter_set( pos, t_dirt );
+        here.spawn_item( pos, itype_pipe, rng( 1, 2 ) );
+        here.spawn_item( pos, itype_rebar, rng( 0, 1 ) );
+        here.spawn_item( pos, itype_steel_chunk, rng( 1, 6 ) );
     }
 }
 

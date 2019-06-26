@@ -543,6 +543,7 @@ ter_id t_null,
        t_slime,
        t_bridge,
        t_covered_well,
+       t_guardrail,
        // Lighting related
        t_utility_light,
        // Walls
@@ -915,6 +916,7 @@ void set_ter_ids()
     t_switch_rb = ter_id( "t_switch_rb" );
     t_switch_even = ter_id( "t_switch_even" );
     t_covered_well = ter_id( "t_covered_well" );
+    t_guardrail = ter_id( "t_guardrail" );
     t_water_pump = ter_id( "t_water_pump" );
     t_conveyor = ter_id( "t_conveyor" );
     t_machinery_light = ter_id( "t_machinery_light" );
