@@ -2522,6 +2522,11 @@ void activity_handlers::oxytorch_finish( player_activity *act, player *p )
     } else if( ter == t_window_bars ) {
         g->m.ter_set( pos, t_window_empty );
         g->m.spawn_item( p->pos(), "pipe", rng( 1, 2 ) );
+    } else if ( ter == t_guardrail ) {
+        g->m.ter_set( pos, t_dirt );
+        g->m.spawn_item( pos, "pipe", rng( 1, 2 ) );
+        g->m.spawn_item( pos, "rebar", rng( 0, 1 ) );
+        g->m.spawn_item( pos, "steel_chunk", rng( 1, 6 ) );
     }
 }
 
