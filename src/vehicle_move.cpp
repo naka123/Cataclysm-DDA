@@ -1430,7 +1430,18 @@ void vehicle::pldrive( const point &p, int z )
     }
 
     if( p.y != 0 ) {
-        int thr_amount = 100 * ( std::abs( velocity ) < 2000 ? 4 : 5 );
+        int thr_amount;
+        if( std::abs( cruise_velocity ) < 6 * 100 ) {
+            thr_amount = 250;
+        }
+        //else if( std::abs( cruise_velocity ) < 2000 ) {
+        //    thr_amount = 500;
+        //}
+        else {
+            thr_amount = 750;
+        }
+        //= 100 * ( std::abs( velocity ) < 2000 ? 4 : 5 );
+
         if( cruise_on ) {
             cruise_thrust( -p.y * thr_amount );
         } else {
