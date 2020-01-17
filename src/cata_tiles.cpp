@@ -1506,9 +1506,8 @@ void cata_tiles::draw( const point &dest, const tripoint &center, int width, int
                              tripoint( g->ter_view_p.xy(), center.z ), 0, 0, lit_level::LIT,
                              false );
     }
-    if( you.controlling_vehicle ) {
-        cata::optional<tripoint> indicator_offset = g->get_veh_dir_indicator_location( true );
-        if( indicator_offset ) {
+    if( you.controlling_vehicle || g->remoteveh() ) {
+        if( cata::optional<tripoint> indicator_offset = g->get_veh_dir_indicator_location( true ) ) {
             draw_from_id_string( "cursor", C_NONE, empty_string,
                                  indicator_offset->xy() +
                                  tripoint( you.posx(), you.posy(), center.z ),
