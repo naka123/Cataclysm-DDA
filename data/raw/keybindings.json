@@ -2356,6 +2356,18 @@
   },
   {
     "type": "keybinding",
+    "name": "Move View Up",
+    "category": "DEFAULTMODE",
+    "id": "shift_up"
+  },
+  {
+    "type": "keybinding",
+    "name": "Move View Down",
+    "category": "DEFAULTMODE",
+    "id": "shift_dn"
+  },
+  {
+    "type": "keybinding",
     "name": "Burst-Fire Wielded Item",
     "category": "DEFAULTMODE",
     "id": "fire_burst"

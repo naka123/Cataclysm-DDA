@@ -1763,6 +1763,7 @@ bool game::handle_action()
             case ACTION_CENTER:
                 player_character.view_offset.x = driving_view_offset.x;
                 player_character.view_offset.y = driving_view_offset.y;
+                player_character.view_offset.z = player_character.pos().z;
                 break;
 
             case ACTION_SHIFT_N:
@@ -1787,6 +1788,14 @@ bool game::handle_action()
                                                 shift_delta.at( act ).second * soffset : shift_delta.at( act ).first * soffset;
             }
             break;
+
+            case ACTION_SHIFT_UP:
+                u.view_offset.z += 1;
+                break;
+
+            case ACTION_SHIFT_DN:
+                u.view_offset.z -= 1;
+                break;
 
             case ACTION_LOOK:
                 look_around();

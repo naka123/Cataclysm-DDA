@@ -2574,6 +2574,8 @@ input_context get_default_mode_input_context()
     ctxt.register_action( "shift_sw" );
     ctxt.register_action( "shift_w" );
     ctxt.register_action( "shift_nw" );
+    ctxt.register_action( "shift_up" );
+    ctxt.register_action( "shift_dn" );
     ctxt.register_action( "cycle_move" );
     ctxt.register_action( "reset_move" );
     ctxt.register_action( "toggle_run" );

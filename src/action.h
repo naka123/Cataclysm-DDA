@@ -92,6 +92,10 @@ enum action_id : int {
     ACTION_SHIFT_W,
     /** Move viewport north-west */
     ACTION_SHIFT_NW,
+    /** Move viewport up */
+    ACTION_SHIFT_UP,
+    /** Move viewport down */
+    ACTION_SHIFT_DN,
     /**@}*/
 
     // Environment Interaction Actions

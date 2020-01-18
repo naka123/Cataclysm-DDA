@@ -3261,7 +3261,8 @@ cata::optional<tripoint> input_context::get_coordinates( const catacurses::windo
         p = view_offset + selected - dim.window_size_cell / 2;
     }
 
-    return tripoint( p, get_map().get_abs_sub().z );
+    avatar& player = get_avatar();
+    return tripoint( p, player.pos().z + player.view_offset.z );
 }
 
 int get_terminal_width()
