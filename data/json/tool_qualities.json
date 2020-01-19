@@ -261,5 +261,10 @@
     "type": "tool_quality",
     "id": "PRESSURIZATION",
     "name": { "str": "pressurizing" }
+  },
+  {
+    "type": "tool_quality",
+    "id": "RADIO_RANGE_BOOSTING",
+    "name": { "str": "radio range boosting" }
   }
 ]
