@@ -247,9 +247,9 @@ bool avatar_action::move( avatar &you, map &m, int dx, int dy, int dz )
                            you.posx() << "," << you.posy() << "," << you.posz() << ") to (" <<
                            dest_loc.x << "," << dest_loc.y << "," << dest_loc.z << ")";
 
-    if( g->disable_robot( dest_loc ) ) {
-        return false;
-    }
+    //if( g->disable_robot( dest_loc ) ) {
+    //    return false;
+    //}
 
     // Check if our movement is actually an attack on a monster or npc
     // Are we displacing a monster?
