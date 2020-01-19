@@ -4039,7 +4039,7 @@ void activity_handlers::robot_control_do_turn( player_activity *act, player *p )
     }
     const shared_ptr_fast<monster> z = act->monsters[0].lock();
 
-    if( !z || !iuse::robotcontrol_can_target( p, *z ) ) {
+    if( !z || !iuse::robotcontrol_can_target( p, *z, false ) ) {
         p->add_msg_if_player( _( "Target lost.  IFF override failed." ) );
         act->set_to_null();
         return;
@@ -4060,7 +4060,7 @@ void activity_handlers::robot_control_finish( player_activity *act, player *p )
     shared_ptr_fast<monster> z = act->monsters[0].lock();
     act->monsters.clear();
 
-    if( !z || !iuse::robotcontrol_can_target( p, *z ) ) {
+    if( !z || !iuse::robotcontrol_can_target( p, *z, false ) ) {
         p->add_msg_if_player( _( "Target lost.  IFF override failed." ) );
         return;
     }

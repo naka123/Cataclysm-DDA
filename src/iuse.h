@@ -226,7 +226,7 @@ void play_music( Character &p, const tripoint &source, int volume, int max_moral
 int towel_common( Character *, item *, bool );
 
 // Helper for validating a potential taget of robot control
-bool robotcontrol_can_target( player *, const monster & );
+bool robotcontrol_can_target( player *, const monster &, bool friendly );
 
 // Helper for handling pesky wannabe-artists
 int handle_ground_graffiti( Character &p, item *it, const std::string &prefix,
