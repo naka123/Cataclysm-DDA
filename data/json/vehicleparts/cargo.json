@@ -22,6 +22,29 @@
     "damage_reduction": { "all": 6 }
   },
   {
+    "type": "vehicle_part",
+    "id": "basketlg_external_folding",
+    "name": "external folding shopping cart basket",
+    "symbol": "o",
+    "looks_like": "basketlg_external",
+    "color": "brown",
+    "broken_symbol": "#",
+    "broken_color": "brown",
+    "damage_modifier": 60,
+    "durability": 75,
+    "size": 600,
+    "folded_volume": 24,
+    "item": "folding_basket",
+    "location": "structure",
+    "requirements": {
+      "install": { "skills": [ [ "mechanics", 1 ] ], "time": "450 s", "using": [ [ "welding_standard", 2 ] ] },
+      "removal": { "skills": [ [ "mechanics", 1 ] ], "time": "450 s", "using": [ [ "vehicle_weld_removal", 1 ] ] },
+      "repair": { "skills": [ [ "mechanics", 1 ], [ "fabrication", 2 ] ], "time": "350 s", "using": [ [ "welding_standard", 2 ] ] }
+    },
+    "flags": [ "CARGO", "OBSTACLE", "FOLDABLE" ],
+    "damage_reduction": { "all": 4 }
+  },
+  {
     "id": "basketsm_external",
     "type": "vehicle_part",
     "name": { "str": "external wire bike basket" },
