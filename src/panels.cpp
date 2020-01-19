@@ -1654,7 +1654,26 @@ static void draw_health_classic( avatar &u, const catacurses::window &w )
         mvwprintz( w, point( 35, 4 ), c_light_gray, to_string( ( veh->face.dir() + 90 ) % 360 ) + "°" );
         // target speed > current speed
         const float strain = veh->strain();
-        if( veh->cruise_on ) {
+        if( veh->is_holonomic() ) {
+            int c_speed = static_cast<int>( convert_velocity( veh->velocity, VU_VEHICLE ) );
+
+            const std::string type = get_option<std::string>( "USE_METRIC_SPEEDS" );
+            int offset = get_int_digits( c_speed );
+
+            nc_color col_vel = strain <= 0 ? c_light_blue :
+                               ( strain <= 0.2 ? c_yellow :
+                                 ( strain <= 0.4 ? c_light_red : c_red ) );
+
+            nc_color col_omni = c_yellow;
+            if( veh->decoupled_on ) {
+                col_omni = c_light_red;
+            }
+            mvwprintz( w, point( 21, 5 ), col_omni, "OMNI" );
+            mvwprintz( w, point( 26, 5 ), col_vel, "%d", c_speed );
+            mvwprintz( w, point( 26 + offset + 1, 5 ), c_light_gray, type );
+
+
+        } else if( veh->cruise_on ) {
             nc_color col_vel = strain <= 0 ? c_light_blue :
                                ( strain <= 0.2 ? c_yellow :
                                  ( strain <= 0.4 ? c_light_red : c_red ) );

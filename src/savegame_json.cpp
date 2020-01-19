@@ -2568,6 +2568,7 @@ void vehicle::deserialize( JsonIn &jsin )
     JsonObject data = jsin.get_object();
 
     int fdir = 0;
+    int fdir_desired = 0;
     int mdir = 0;
 
     data.read( "type", type );
@@ -2575,6 +2576,7 @@ void vehicle::deserialize( JsonIn &jsin )
     data.read( "posy", pos.y );
     data.read( "om_id", om_id );
     data.read( "faceDir", fdir );
+    data.read( "face_desiredDir", fdir_desired );
     data.read( "moveDir", mdir );
     data.read( "turn_dir", turn_dir );
     data.read( "velocity", velocity );
@@ -2597,6 +2599,7 @@ void vehicle::deserialize( JsonIn &jsin )
     }
 
     face.init( fdir );
+    face_desired.init( fdir_desired );
     move.init( mdir );
     data.read( "name", name );
     std::string temp_id;
@@ -2744,6 +2747,7 @@ void vehicle::serialize( JsonOut &json ) const
     json.member( "posy", pos.y );
     json.member( "om_id", om_id );
     json.member( "faceDir", face.dir() );
+    json.member( "face_desiredDir", face_desired.dir() );
     json.member( "moveDir", move.dir() );
     json.member( "turn_dir", turn_dir );
     json.member( "velocity", velocity );
