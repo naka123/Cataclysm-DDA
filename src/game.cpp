@@ -2692,6 +2692,18 @@ input_context get_default_mode_input_context()
     return ctxt;
 }
 
+int game::get_remoteveh_range() {
+    if ( g->u.has_quality( quality_id( "RADIO_RANGE_BOOSTING" ), 2 ) ) {
+        return 160;
+    }
+    else if ( g->u.has_quality( quality_id( "RADIO_RANGE_BOOSTING" ), 1 ) ) {
+        return 80;
+    }
+    else {
+        return 40;
+    }
+}
+
 vehicle *game::remoteveh()
 {
     if( calendar::turn == remoteveh_cache_time ) {

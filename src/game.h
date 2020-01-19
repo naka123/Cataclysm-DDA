@@ -491,6 +491,8 @@ class game
         /** Sets the current remotely controlled vehicle. */
         void setremoteveh( vehicle *veh );
 
+        int get_remoteveh_range();
+
         /** Returns the next available mission id. */
         int assign_mission_id();
         /** Find the npc with the given ID. Returns NULL if the npc could not be found. Searches all loaded overmaps. */

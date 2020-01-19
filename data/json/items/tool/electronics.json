@@ -162,7 +162,8 @@
     "material": [ "aluminum" ],
     "symbol": ",",
     "color": "light_gray",
-    "use_action": [ "DIRECTIONAL_ANTENNA" ]
+    "use_action": [ "DIRECTIONAL_ANTENNA" ],
+    "qualities": [ [ "RADIO_RANGE_BOOSTING", 1 ] ]
   },
   {
     "id": "e_handcuffs",

@@ -8180,7 +8180,7 @@ static vehicle *pickveh( const tripoint &center, bool advanced )
 
     for( auto &veh : get_map().get_vehicles() ) {
         auto &v = veh.v;
-        if( rl_dist( center, v->global_pos3() ) < 40 &&
+        if( rl_dist( center, v->global_pos3() ) < g->get_remoteveh_range() &&
             v->fuel_left( itype_battery, true ) > 0 &&
             ( !empty( v->get_avail_parts( advctrl ) ) ||
               ( !advanced && !empty( v->get_avail_parts( ctrl ) ) ) ) ) {

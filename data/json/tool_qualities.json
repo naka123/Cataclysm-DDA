@@ -289,6 +289,10 @@
     "name": { "str": "pressurizing" }
   },
   {
+    "id": "RADIO_RANGE_BOOSTING",
+    "name": { "str": "radio range boosting" }
+  },
+  {
     "type": "tool_quality",
     "id": "LOCKPICK",
     "name": { "str": "lockpicking" }

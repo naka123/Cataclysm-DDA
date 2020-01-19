@@ -309,7 +309,7 @@ bool vehicle::remote_controlled( const Character &p ) const
     }
 
     for( const vpart_reference &vp : get_avail_parts( "REMOTE_CONTROLS" ) ) {
-        if( rl_dist( p.pos(), vp.pos() ) <= 40 ) {
+        if( rl_dist( p.pos(), vp.pos() ) <= g->get_remoteveh_range() ) {
             return true;
         }
     }
