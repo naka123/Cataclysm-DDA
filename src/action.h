@@ -536,6 +536,7 @@ action_id get_movement_action_from_delta( const tripoint &d, iso_rotate rot );
 
 // Helper function to convert movement action to coordinate delta point
 point get_delta_from_movement_action( action_id act, iso_rotate rot );
+tripoint get_delta_from_movement_action_3d(action_id act, iso_rotate rot);
 
 /**
  * Show the action menu

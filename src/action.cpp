@@ -580,6 +580,35 @@ point get_delta_from_movement_action( const action_id act, const iso_rotate rot 
     }
 }
 
+tripoint get_delta_from_movement_action_3d(const action_id act, const iso_rotate rot)
+{
+    const bool iso_mode = rot == iso_rotate::yes && use_tiles && tile_iso;
+    switch (act) {
+    case ACTION_MOVE_FORTH:
+        return iso_mode ? tripoint_north_east : tripoint_north;
+    case ACTION_MOVE_FORTH_RIGHT:
+        return iso_mode ? tripoint_east : tripoint_north_east;
+    case ACTION_MOVE_RIGHT:
+        return iso_mode ? tripoint_south_east : tripoint_east;
+    case ACTION_MOVE_BACK_RIGHT:
+        return iso_mode ? tripoint_south : tripoint_south_east;
+    case ACTION_MOVE_BACK:
+        return iso_mode ? tripoint_south_west : tripoint_south;
+    case ACTION_MOVE_BACK_LEFT:
+        return iso_mode ? tripoint_west : tripoint_south_west;
+    case ACTION_MOVE_LEFT:
+        return iso_mode ? tripoint_north_west : tripoint_west;
+    case ACTION_MOVE_FORTH_LEFT:
+        return iso_mode ? tripoint_north : tripoint_north_west;
+    case ACTION_MOVE_UP:
+        return tripoint_above;
+    case ACTION_MOVE_DOWN:
+        return tripoint_below;
+    default:
+        return tripoint_zero;
+    }
+}
+
 cata::optional<input_event> hotkey_for_action( const action_id action,
         const int maximum_modifier_count, const bool restrict_to_printable )
 {
