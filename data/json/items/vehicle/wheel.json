@@ -406,5 +406,22 @@
     "name": { "str": "banded wooden cart wheel" },
     "description": "A wooden cart wheel with metal bands for durability, hand made.",
     "relative": { "weight": "500 g" }
+  },
+  {
+    "id": "omni_wheel",
+    "category": "veh_parts",
+    "type": "WHEEL",
+    "name": "set of omni-wheels",
+    "name_plural": "sets of omni-wheels",
+    "description": "A set of omni wheels, like the ones found under a police bot.",
+    "weight": "10000 g",
+    "volume": "10 L",
+    "bashing": 6,
+    "to_hit": -1,
+    "material": [ "steel", "plastic" ],
+    "symbol": "]",
+    "color": "dark_gray",
+    "diameter": 10,
+    "width": 4
   }
 ]

@@ -676,5 +676,30 @@
     "rolling_resistance": 2.05,
     "proportional": { "durability": 2, "damage_modifier": 2 },
     "damage_reduction": { "all": 20 }
+  },
+  {
+    "id": "wheel_omni",
+    "type": "vehicle_part",
+    "name": "mecanum omni-wheels",
+    "item": "omni_wheel",
+    "location": "under",
+    "symbol": "|",
+    "broken_symbol": "x",
+    "color": "dark_gray",
+    "durability": 70,
+    "description": "A set of omni wheels, like the ones found under a police bot.",
+    "damage_modifier": 50,
+    "folded_volume": 10,
+    "breaks_into": [ { "item": "plastic_chunk", "count": [ 1, 3 ] } ],
+    "requirements": {
+      "install": { "skills": [ [ "mechanics", 4 ] ], "time": "4 m", "using": [ [ "vehicle_bolt", 1 ] ] },
+      "removal": { "skills": [ [ "mechanics", 4 ] ], "time": "2 m", "using": [ [ "vehicle_bolt", 1 ] ] },
+      "repair": { "skills": [ [ "mechanics", 7 ] ], "time": "15 m", "using": [ [ "adhesive", 1 ], [ "plastics", 1 ] ] }
+    },
+    "rolling_resistance": 29,
+    "wheel_type": "rigid",
+    "contact_area": 4,
+    "flags": [ "STABLE", "WHEEL", "HOLONOMIC", "NEEDS_JACKING" ],
+    "damage_reduction": { "bash": 8 }
   }
 ]

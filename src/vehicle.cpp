@@ -5636,6 +5636,7 @@ void vehicle::refresh()
     wheelcache.clear();
     rail_wheelcache.clear();
     rotors.clear();
+    holomonic_wheelcache.clear();
     steering.clear();
     speciality.clear();
     floating.clear();
@@ -5765,6 +5766,9 @@ void vehicle::refresh()
             railwheel_ymin = std::min( railwheel_ymin, pt.y );
             railwheel_xmax = std::max( railwheel_xmax, pt.x );
             railwheel_ymax = std::max( railwheel_ymax, pt.y );
+        }
+        if( vpi.has_flag( VPFLAG_WHEEL ) && vpi.has_flag( VPFLAG_HOLONOMIC ) ) {
+            holomonic_wheelcache.push_back( p );
         }
         if( ( vpi.has_flag( "STEERABLE" ) && part_with_feature( pt, "STEERABLE", true ) != -1 ) ||
             vpi.has_flag( "TRACKED" ) ) {

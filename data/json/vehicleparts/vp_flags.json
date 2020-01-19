@@ -158,6 +158,12 @@
     "info": "If your vehicle consists of a single tile, this wheel is enough to allow it to move."
   },
   {
+    "id": "HOLONOMIC",
+    "type": "json_flag",
+    "context": [ "vehicle_part" ],
+    "info": "This is omnidirectional wheel. If all vehicle wheels is omnidirectional, it can move in any direction and turn independently."
+  },
+  {
     "id": "STEERABLE",
     "type": "json_flag",
     "context": [ "vehicle_part" ],

@@ -1844,6 +1844,7 @@ class vehicle
         std::vector<int> wheelcache;       // List of wheels
         std::vector<int> rotors;           // List of rotors
         std::vector<int> rail_wheelcache;  // List of rail wheels
+        std::vector<int> holomonic_wheelcache;  // List of omnidirectional wheel (and "legs")
         std::vector<int> steering;         // List of STEERABLE parts
         // List of parts that will not be on a vehicle very often, or which only one will be present
         std::vector<int> speciality;
