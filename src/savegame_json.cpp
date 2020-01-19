@@ -2868,6 +2868,7 @@ void vehicle::deserialize( JsonIn &jsin )
     data.allow_omitted_members();
 
     int fdir = 0;
+    int fdir_desired = 0;
     int mdir = 0;
 
     data.read( "type", type );
@@ -2875,6 +2876,7 @@ void vehicle::deserialize( JsonIn &jsin )
     data.read( "posy", pos.y );
     data.read( "om_id", om_id );
     data.read( "faceDir", fdir );
+    data.read( "face_desiredDir", fdir_desired );
     data.read( "moveDir", mdir );
     int turn_dir_int;
     data.read( "turn_dir", turn_dir_int );
@@ -2900,6 +2902,8 @@ void vehicle::deserialize( JsonIn &jsin )
 
     units::angle fdir_angle = units::from_degrees( fdir );
     face.init( fdir_angle );
+    units::angle fdir_desired_angle = units::from_degrees( fdir_desired );
+    face_desired.init( fdir_desired_angle );
     move.init( units::from_degrees( mdir ) );
     data.read( "name", name );
     std::string temp_id;
@@ -3020,6 +3024,7 @@ void vehicle::serialize( JsonOut &json ) const
     json.member( "posy", pos.y );
     json.member( "om_id", om_id );
     json.member( "faceDir", std::lround( to_degrees( face.dir() ) ) );
+    json.member( "face_desiredDir", std::lround( to_degrees( face_desired.dir() ) ) );
     json.member( "moveDir", std::lround( to_degrees( move.dir() ) ) );
     json.member( "turn_dir", std::lround( to_degrees( turn_dir ) ) );
     json.member( "velocity", velocity );

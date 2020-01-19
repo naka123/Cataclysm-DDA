@@ -743,6 +743,8 @@ void vehicle::use_controls( const tripoint &pos )
                               keybind( "TOGGLE_CRUISE_CONTROL" ) );
         actions.emplace_back( [&] {
             decoupled_on = !decoupled_on;
+            face_desired = face;
+            turn_dir = face.dir();
             add_msg( decoupled_on ? _( "Decoupled mode turned on" ) : _( "Decoupled mode turned off" ) );
             refresh();
         } );

@@ -3824,7 +3824,14 @@ cata::optional<tripoint> game::get_veh_dir_indicator_location( bool next ) const
     int veh_offset_x = veh_ref_pos.x - u.pos().x;
     int veh_offset_y = veh_ref_pos.y - u.pos().y;
 
-    rl_vec2d face = next ? veh->dir_vec() : veh->face_vec();
+    rl_vec2d face;
+    
+    if( !( veh->is_holonomic() && !veh->decoupled_on ) ) {
+        face = next ? veh->dir_vec() : veh->face_vec();
+    }
+    else {
+        face = veh->move_vec();
+    }
     float r = 10.0;
     return tripoint( static_cast<int>( r * face.x ) + veh_offset_x, static_cast<int>( r * face.y )  + veh_offset_y, veh_ref_pos.z );
 }

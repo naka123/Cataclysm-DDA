@@ -1285,6 +1285,10 @@ class vehicle
         // can the vehicle use rails?
         bool can_use_rails() const;
 
+        // is the vehicle able to move and turn independently
+        bool is_holonomic() const;
+        bool is_turning_inplace() const;
+
         // Get maximum ground velocity gained by combined power of all engines.
         // If fueled == true, then only the engines which the vehicle has fuel for are included
         int max_ground_velocity( bool fueled = true ) const;
@@ -1492,6 +1496,12 @@ class vehicle
          * @param z for vertical movement - e.g helicopters
          */
         void pldrive( const point &p, int z = 0 );
+
+        /**
+        * Player is driving the holonomic vehicle
+        * @param p direction player is steering and moving
+        */
+        void pldrive_holonomic( const tripoint &p );
 
         // stub for per-vpart limit
         units::volume max_volume( int part ) const;
@@ -1969,6 +1979,8 @@ class vehicle
         std::array<point, 2> pivot_anchor;
         // frame direction
         tileray face;
+        // desired frame direction
+        tileray face_desired;
         // direction we are moving
         tileray move;
 

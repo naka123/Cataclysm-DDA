@@ -484,6 +484,28 @@ void vehicle::print_speed_gauge( const catacurses::window &win, const point &p, 
     if( spacing < 0 ) {
         spacing = 0;
     }
+
+    if( is_holonomic() ) {
+        int c_speed = static_cast<int>( convert_velocity( velocity, VU_VEHICLE ) );
+
+        const std::string type = get_option<std::string>( "USE_METRIC_SPEEDS" );
+        int offset = get_int_digits( c_speed );
+
+        nc_color col_vel = strain <= 0 ? c_light_blue :
+                           ( strain <= 0.2 ? c_yellow :
+                             ( strain <= 0.4 ? c_light_red : c_red ) );
+
+        nc_color col_omni = c_yellow;
+        if( decoupled_on ) {
+            col_omni = c_light_red;
+        }
+        mvwprintz( w, p + point( 0, 0 ), col_omni, "OMNI" );
+        mvwprintz( w, point( offset, 0 ), col_vel, "%d", c_speed );
+        mvwprintz( w, point(  offset + 1, 0 ), c_light_gray, type );
+
+        return;
+    }
+
     if( !cruise_on ) {
         return;
     }

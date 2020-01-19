@@ -93,8 +93,14 @@ int vehicle::slowdown( int at_velocity ) const
         f_total_drag += coeff_water_drag() * mps * mps;
     } else if( !is_falling && !is_flying ) {
         double f_rolling_drag = coeff_rolling_drag() * ( vehicles::rolling_constant_to_variable + mps );
-        // increase rolling resistance by up to 25x if the vehicle is skidding at right angle to facing
-        const double skid_factor = 1 + 24 * std::abs( units::sin( face.dir() - move.dir() ) );
+        double skid_factor;
+        if( !is_holonomic() ) {
+            // increase rolling resistance by up to 25x if the vehicle is skidding at right angle to facing
+            const double skid_factor = 1 + 24 * std::abs( units::sin( face.dir() - move.dir() ) );
+        } else {
+            // in holonmic platform wheels give same rolling resistance in all directions
+            skid_factor = 1;
+        }
         f_total_drag += f_rolling_drag * skid_factor;
     }
     double accel_slowdown = f_total_drag / to_kilogram( total_mass() );
@@ -388,7 +394,9 @@ void vehicle::thrust( int thd, int z )
     //if vehicle is stopped, set target direction to forward.
     //ensure it is not skidding. Set turns used to 0.
     if( !is_moving() && z == 0 ) {
-        turn_dir = face.dir();
+        if( !decoupled_on ) {
+            turn_dir = face.dir();
+        }
         stop();
     }
     bool pl_ctrl = player_in_control( get_player_character() );
@@ -446,8 +454,8 @@ void vehicle::thrust( int thd, int z )
     const int max_brake = 20 * 100;
     //pos or neg if accelerator or brake
     int vel_inc = ( accel + ( thrusting ? 0 : max_brake ) ) * thd;
-    // Reverse is only 60% acceleration, unless an electric motor is in use
-    if( thd == -1 && thrusting && !has_engine_type( fuel_type_battery, true ) ) {
+    if( thd == -1 && thrusting && !has_engine_type( fuel_type_battery, true ) && !is_holonomic() ) {
+        // Reverse is only 60% acceleration, unless an electric motor is in use or holonomic
         vel_inc = .6 * vel_inc;
     }
 
@@ -614,13 +622,19 @@ void vehicle::turn( units::angle deg )
     turn_dir = normalize( turn_dir + deg );
     // quick rounding the turn dir to a multiple of 15
     turn_dir = round_to_multiple_of( turn_dir, 15_degrees );
+
+    if( decoupled_on ) {
+        face_desired.init( turn_dir );
+    }
 }
 
 void vehicle::stop( bool update_cache )
 {
     velocity = 0;
+    if( !decoupled_on ) {
+        move = face;
+    }
     skidding = false;
-    move = face;
     last_turn = 0_degrees;
     of_turn_carry = 0;
     if( !update_cache ) {
@@ -668,7 +682,7 @@ bool vehicle::collision( std::vector<veh_collision> &colls,
     const bool vertical = bash_floor || dp.z != 0;
     const int &coll_velocity = vertical ? vertical_velocity : velocity;
     // Skip collisions when there is no apparent movement, except verticially moving rotorcraft.
-    if( coll_velocity == 0 && !is_rotorcraft() ) {
+    if( coll_velocity == 0 && !is_rotorcraft() && !is_turning_inplace() ) {
         just_detect = true;
     }
 
@@ -1842,7 +1856,9 @@ vehicle *vehicle::act_on_map()
 
     // The direction we're moving
     tileray mdir;
-    if( skidding || should_fall ) {
+
+    //TODO: holonomic platform speed vector change over time
+    if( skidding || should_fall || is_holonomic() ) {
         // If skidding, it's the move vector
         // Same for falling - no air control
         mdir = move;

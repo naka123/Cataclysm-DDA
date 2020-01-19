@@ -450,7 +450,7 @@ static bool sees_veh( const Creature &c, vehicle &veh, bool force_recalc )
 
 vehicle *map::move_vehicle( vehicle &veh, const tripoint &dp, const tileray &facing )
 {
-    if( dp == tripoint_zero ) {
+    if( dp == tripoint_zero && !veh.is_turning_inplace() ) {
         debugmsg( "Empty displacement vector" );
         return &veh;
     } else if( std::abs( dp.x ) > 1 || std::abs( dp.y ) > 1 || std::abs( dp.z ) > 1 ) {
@@ -481,7 +481,7 @@ vehicle *map::move_vehicle( vehicle &veh, const tripoint &dp, const tileray &fac
         return &veh;
     }
 
-    veh.precalc_mounts( 1, veh.skidding ? veh.turn_dir : facing.dir(), veh.pivot_point() );
+    veh.precalc_mounts( 1, ( veh.skidding || veh.decoupled_on ) ? veh.turn_dir : facing.dir(), veh.pivot_point() );
 
     // cancel out any movement of the vehicle due only to a change in pivot
     tripoint dp1 = dp - veh.pivot_displacement();
@@ -495,7 +495,7 @@ vehicle *map::move_vehicle( vehicle &veh, const tripoint &dp, const tileray &fac
     // Split into vertical and horizontal movement
     const int &coll_velocity = vertical ? veh.vertical_velocity : veh.velocity;
     const int velocity_before = coll_velocity;
-    if( velocity_before == 0 && !veh.is_rotorcraft() && !veh.is_flying_in_air() ) {
+    if( velocity_before == 0 && !veh.is_rotorcraft() && !veh.is_flying_in_air() && !veh.is_turning_inplace() ) {
         debugmsg( "%s tried to move %s with no velocity",
                   veh.name, vertical ? "vertically" : "horizontally" );
         return &veh;
@@ -556,7 +556,7 @@ vehicle *map::move_vehicle( vehicle &veh, const tripoint &dp, const tileray &fac
              !collisions.empty() && !veh_veh_coll_flag );
 
     const int velocity_after = coll_velocity;
-    bool can_move = velocity_after != 0 && sgn( velocity_after ) == sgn( velocity_before );
+    bool can_move = ( velocity_after != 0 || veh.is_turning_inplace() ) && sgn( velocity_after ) == sgn( velocity_before );
     if( dp.z != 0 && veh.is_rotorcraft() ) {
         can_move = true;
     }
@@ -605,7 +605,7 @@ vehicle *map::move_vehicle( vehicle &veh, const tripoint &dp, const tileray &fac
     vehicle *new_vehicle = &veh;
     if( can_move ) {
         // Accept new direction
-        if( veh.skidding ) {
+        if( veh.skidding || veh.decoupled_on ) {
             veh.face.init( veh.turn_dir );
         } else {
             veh.face = facing;

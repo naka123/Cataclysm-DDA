@@ -471,6 +471,51 @@ inline static void pldrive( point d )
     return pldrive( tripoint( d, 0 ) );
 }
 
+static void pldrive_holonomic( int x, int y, int turn )
+{
+    if( !g->check_safe_mode_allowed() ) {
+        return;
+    }
+    player &u = g->u;
+    vehicle *veh = g->remoteveh();
+    bool remote = true;
+    int part = -1;
+    if( !veh ) {
+        if( const optional_vpart_position vp = g->m.veh_at( u.pos() ) ) {
+            veh = &vp->vehicle();
+            part = vp->part_index();
+        }
+        remote = false;
+    }
+    if( !veh ) {
+        dbg( D_ERROR ) << "game::pldrive_holonomic: can't find vehicle!  Drive mode is now off.";
+        debugmsg( "game::pldrive_holonomic error: can't find vehicle!  Drive mode is now off." );
+        u.in_vehicle = false;
+        return;
+    }
+    if( !remote ) {
+        int pctr = veh->part_with_feature( part, "CONTROLS", true );
+        if( pctr < 0 ) {
+            add_msg( m_info, _( "You can't drive the vehicle from here.  You need controls!" ) );
+            u.controlling_vehicle = false;
+            return;
+        }
+    } else {
+        if( empty( veh->get_avail_parts( "REMOTE_CONTROLS" ) ) ) {
+            add_msg( m_info, _( "Can't drive this vehicle remotely.  It has no working controls." ) );
+            return;
+        }
+    }
+
+    veh->pldrive_holonomic( tripoint( x, y, turn ) );
+
+}
+
+inline static void pldrive_holonomic( tripoint d )
+{
+    return pldrive_holonomic( d.x, d.y, d.z );
+}
+
 static void open()
 {
     avatar &player_character = get_avatar();
@@ -1573,6 +1618,11 @@ bool game::handle_action()
     bool veh_ctrl = !player_character.is_dead_state() &&
                     ( ( vp && vp->vehicle().player_in_control( player_character ) ) || remoteveh() != nullptr );
 
+    bool veh_ctrl_holo = false;
+    if( veh_ctrl ) {
+        veh_ctrl_holo = get_posessed_vehicle( u.pos() )->is_holonomic();
+    }
+
     // If performing an action with right mouse button, co-ordinates
     // of location clicked.
     cata::optional<tripoint> mouse_target;
@@ -1807,9 +1857,13 @@ bool game::handle_action()
                       player_character.has_active_bionic( bio_remote ) ) ) {
                     rcdrive( get_delta_from_movement_action( act, iso_rotate::yes ) );
                 } else if( veh_ctrl ) {
-                    // vehicle control uses x for steering and y for ac/deceleration,
-                    // so no rotation needed
-                    pldrive( get_delta_from_movement_action( act, iso_rotate::no ) );
+                    if( !veh_ctrl_holo ) {
+                        // vehicle control uses x for steering and y for ac/deceleration,
+                        // so no rotation needed
+                        pldrive( get_delta_from_movement_action( act, iso_rotate::no ) );
+                    } else {
+                        pldrive_holonomic( get_delta_from_movement_action_3d( act, iso_rotate::yes ) );
+                    }
                 } else {
                     point dest_delta = get_delta_from_movement_action( act, iso_rotate::yes );
                     if( auto_travel_mode && !player_character.is_auto_moving() ) {
@@ -1841,6 +1895,10 @@ bool game::handle_action()
                 }
                 break;
             case ACTION_MOVE_DOWN:
+                if( veh_ctrl && veh_ctrl_holo ) {
+                    // turning holonomic platform CCW
+                    pldrive_holonomic( get_delta_from_movement_action_3d( act, iso_rotate::yes ) );
+                } else  {
                 if( player_character.is_mounted() ) {
                     auto *mon = player_character.mounted_creature.get();
                     if( !mon->has_flag( MF_RIDEABLE_MECH ) ) {
@@ -1853,9 +1911,13 @@ bool game::handle_action()
                 } else if( veh_ctrl && vp->vehicle().is_rotorcraft() ) {
                     pldrive( tripoint_below );
                 }
+                }
                 break;
-
             case ACTION_MOVE_UP:
+                if( veh_ctrl && veh_ctrl_holo ) {
+                    // turning holonomic platform CW 
+                    pldrive_holonomic( get_delta_from_movement_action_3d( act, iso_rotate::yes ) );
+                } else {
                 if( player_character.is_mounted() ) {
                     auto *mon = player_character.mounted_creature.get();
                     if( !mon->has_flag( MF_RIDEABLE_MECH ) ) {
@@ -1867,6 +1929,7 @@ bool game::handle_action()
                     vertical_move( 1, false );
                 } else if( veh_ctrl && vp->vehicle().is_rotorcraft() ) {
                     pldrive( tripoint_above );
+                }
                 }
                 break;
 

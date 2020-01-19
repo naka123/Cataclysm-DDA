@@ -2306,6 +2306,7 @@ bool vehicle::split_vehicles( const std::vector<std::vector <int>> &new_vehs,
             }
             new_vehicle->name = name;
             new_vehicle->move = move;
+            new_vehicle->face_desired = face_desired;
             new_vehicle->turn_dir = turn_dir;
             new_vehicle->velocity = velocity;
             new_vehicle->vertical_velocity = vertical_velocity;
@@ -2409,7 +2410,7 @@ bool vehicle::split_vehicles( const std::vector<std::vector <int>> &new_vehs,
         }
 
         // update the precalc points
-        new_vehicle->precalc_mounts( 1, new_vehicle->skidding ?
+        new_vehicle->precalc_mounts( 1, ( new_vehicle->skidding || new_vehicle->decoupled_on ) ?
                                      new_vehicle->turn_dir : new_vehicle->face.dir(),
                                      new_vehicle->pivot_point() );
         if( !passengers.empty() ) {
@@ -3528,6 +3529,18 @@ bool vehicle::can_use_rails() const
         }
     }
     return is_wheel_on_rail;
+}
+
+bool vehicle::is_holonomic() const
+{
+    // all wheels should be omni-directional
+    bool all_omni = !holomonic_wheelcache.empty() && wheelcache.size() == holomonic_wheelcache.size();
+    return all_omni;
+}
+
+bool vehicle::is_turning_inplace() const
+{
+    return !skidding && decoupled_on && face.dir() != face_desired.dir();
 }
 
 int vehicle::ground_acceleration( const bool fueled, int at_vel_in_vmi ) const
@@ -5505,7 +5518,7 @@ void vehicle::gain_moves()
     fuel_used_last_turn.clear();
     check_falling_or_floating();
     const bool pl_control = player_in_control( get_player_character() );
-    if( is_moving() || is_falling ) {
+    if( is_moving() || is_falling || is_turning_inplace() ) {
         if( !loose_parts.empty() ) {
             shed_loose_parts();
         }
