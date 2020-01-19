@@ -644,7 +644,7 @@ class RemovePartHandler;
  *     Direction | Meaning
  *     --------- | -------
  *     face      | where it's facing currently
- *     move      | where it's moving, it's different from face if it's skidding
+ *     move      | where it's moving, it's different from face if it's skidding or decoupled mode is turned on
  *     turn_dir  | where it will turn at next move, if it won't stop due to collision
  * - Some methods take `part` or `p` parameter. This is the index of a part in
  *   the parts list.
@@ -2005,6 +2005,8 @@ class vehicle
         // TODO: change these to a bitset + enum?
         // cruise control on/off
         bool cruise_on = true;
+        // decoupled mode (holonomic motion) on/off
+        bool decoupled_on = false;
         // at least one engine is on, of any type
         bool engine_on = false;
         // vehicle tracking on/off

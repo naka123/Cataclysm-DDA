@@ -729,6 +729,7 @@ void vehicle::use_controls( const tripoint &pos )
         actions.push_back( [&] { toggle_autopilot(); refresh(); } );
     }
 
+    if( !is_holonomic() ) {
     options.emplace_back( cruise_on ? _( "Disable cruise control" ) : _( "Enable cruise control" ),
                           keybind( "TOGGLE_CRUISE_CONTROL" ) );
     actions.emplace_back( [&] {
@@ -736,6 +737,16 @@ void vehicle::use_controls( const tripoint &pos )
         add_msg( cruise_on ? _( "Cruise control turned on" ) : _( "Cruise control turned off" ) );
         refresh();
     } );
+
+    } else {
+        options.emplace_back( decoupled_on ? _( "Disable decoupled mode" ) : _( "Enable decoupled mode" ),
+                              keybind( "TOGGLE_CRUISE_CONTROL" ) );
+        actions.emplace_back( [&] {
+            decoupled_on = !decoupled_on;
+            add_msg( decoupled_on ? _( "Decoupled mode turned on" ) : _( "Decoupled mode turned off" ) );
+            refresh();
+        } );
+    }
 
     if( has_electronic_controls ) {
         set_electronics_menu_options( options, actions );
