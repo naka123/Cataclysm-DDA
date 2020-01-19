@@ -3826,7 +3826,7 @@ cata::optional<tripoint> game::get_veh_dir_indicator_location( bool next ) const
 
     rl_vec2d face;
     
-    if( !( veh->is_holonomic() && !veh->decoupled_on ) ) {
+    if( !veh->is_holonomic() || veh->decoupled_on ) {
         face = next ? veh->dir_vec() : veh->face_vec();
     }
     else {

@@ -1456,6 +1456,41 @@ void vehicle::pldrive( const point &p, int z )
     }
 }
 
+// x, y - movement vector, z - turn direction
+void vehicle::pldrive_holonomic( const tripoint &p )
+{
+    if( !is_holonomic() ) {
+        add_msg( m_info, _( "The vehicle is not omnidirectional." ) );
+        return;
+    }
+
+    player &u = g->u;
+    int turn_delta = 15 * -p.z;
+
+    const float handling_diff = handling_difficulty();
+    if( turn_delta != 0 && decoupled_on ) {
+        turn( turn_delta );
+        cruise_velocity = 0;
+        u.moves = 0;
+    } else if( p.x != 0 || p.y != 0 ) {
+        move.init( point( p.x, p.y ) );
+        cruise_velocity = std::min( static_cast<int>(vehicles::vmiph_per_tile), safe_velocity() );
+        u.moves = 0;
+    }
+
+    // TODO: Actually check if we're on land on water (or disable water-skidding)
+    if( skidding && valid_wheel_config() ) {
+        ///\EFFECT_DEX increases chance of regaining control of a vehicle
+
+        ///\EFFECT_DRIVING increases chance of regaining control of a vehicle
+        if( handling_diff * rng( 1, 10 ) < u.dex_cur + u.get_skill_level( skill_driving ) * 2 ) {
+            add_msg( _( "You regain control of the %s." ), name );
+            u.practice( skill_driving, velocity / 5 );
+            skidding = false;
+        }
+    }
+}
+
 // A chance to stop skidding if moving in roughly the faced direction
 void vehicle::possibly_recover_from_skid()
 {
@@ -1488,16 +1523,20 @@ void vehicle::possibly_recover_from_skid()
 // if not skidding, move_vec == face_vec, mv <dot> fv == 1, velocity*1 is returned.
 float vehicle::forward_velocity() const
 {
-    rl_vec2d mv = move_vec();
-    rl_vec2d fv = face_vec();
-    float dot = mv.dot_product( fv );
-    return velocity * dot;
+    if( !decoupled_on ) {
+        rl_vec2d mv = move_vec();
+        rl_vec2d fv = face_vec();
+        float dot = mv.dot_product( fv );
+        return velocity * dot;
+    } else {
+        return velocity;
+    }
 }
 
 rl_vec2d vehicle::velo_vec() const
 {
     rl_vec2d ret;
-    if( skidding ) {
+    if( skidding || decoupled_on ) {
         ret = move_vec();
     } else {
         ret = face_vec();
@@ -1771,10 +1810,15 @@ vehicle *vehicle::act_on_map()
 
     // Low enough for bicycles to go in reverse.
     // If the movement is due to a change in z-level, i.e a helicopter then the lateral movement will often be zero.
-    if( !should_fall && std::abs( velocity ) < 20 && requested_z_change == 0 ) {
+    if( !should_fall && std::abs( velocity ) < 20 && requested_z_change == 0 && !is_turning_inplace() ) {
         stop();
         of_turn -= .321f;
         return this;
+    }
+
+    // HACK
+    if (face.dir() != face_desired.dir() && turn_dir == 0) {
+        turn_dir = face_desired.dir();
     }
 
     const float wheel_traction_area = here.vehicle_wheel_traction( *this );
@@ -1791,7 +1835,23 @@ vehicle *vehicle::act_on_map()
             return this;
         }
     }
-    const float turn_cost = vehicles::vmiph_per_tile / std::max<float>( 0.0001f, std::abs( velocity ) );
+
+    float turn_cost;
+    turn_cost = vehicles::vmiph_per_tile / std::max<float>( 0.0001f, std::abs( velocity ) );
+    
+    if( is_turning_inplace() ) {
+        int deg_to_turn = turn_dir - face.dir();
+        if (deg_to_turn >= 180) {
+            deg_to_turn -= 180;
+        }
+        else if (deg_to_turn <= -180) {
+            deg_to_turn += 180;
+        }
+
+        const float deg_per_turn = 1 / 90.0f;
+
+        turn_cost = 0; // abs(deg_to_turn) * deg_per_turn;
+    }
 
     // Can't afford it this turn?
     // Low speed shouldn't prevent vehicle from falling, though
