@@ -143,7 +143,7 @@
     "id": "HOLONOMIC",
     "type": "json_flag",
     "context": [ "vehicle_part" ],
-    "info": "This is omnidirectional wheel. If all vehicle wheels is omnidirectional, it can move in any direction and turn independently."
+    "info": "This is omnidirectional wheel. If all vehicle wheels is omnidirectional, it can move in any direction and turn independently and simulateously."
   },
   {
     "id": "STEERABLE",
@@ -169,6 +169,12 @@
     "type": "json_flag",
     "context": [ "vehicle_part" ],
     "info": "If the center of balance of your vehicle is between all the wheels, the vehicle will be able to move, provided it has an active engine or motor with enough power to move the vehicle."
+  },
+  {
+    "id": "MOTOR_WHEEL",
+    "type": "json_flag",
+    "context": [ "vehicle_part" ],
+    "info": "This wheel contains an electric motor to drive it."
   },
   {
     "id": "FLAT_SURF",
