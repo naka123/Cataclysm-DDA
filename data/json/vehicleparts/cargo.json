@@ -82,6 +82,30 @@
     "damage_reduction": { "all": 6 }
   },
   {
+    "id": "basketlg_external_folding",
+    "type": "vehicle_part",
+    "name": { "str": "external folding shopping cart basket" },
+    "looks_like": "basketlg_external",
+    "folded_volume": "6 L",
+    "item": "folding_basket",
+    "location": "structure",
+    "symbol": "o",
+    "broken_symbol": "#",
+    "color": "brown",
+    "broken_color": "brown",
+    "durability": 75,
+    "description": "Storage space, mounted outside your vehicle's armor and vulnerable to damage.",
+    "size": 200,
+    "damage_modifier": 60,
+    "requirements": {
+      "install": { "skills": [ [ "mechanics", 1 ] ], "time": "60 m", "using": [ [ "welding_standard", 5 ] ] },
+      "removal": { "skills": [ [ "mechanics", 2 ] ], "time": "30 m", "using": [ [ "vehicle_weld_removal", 1 ] ] },
+      "repair": { "skills": [ [ "mechanics", 2 ] ], "time": "60 m", "using": [ [ "welding_standard", 5 ] ] }
+    },
+    "flags": [ "UNMOUNT_ON_DAMAGE", "CARGO", "PROTRUSION", "OBSTACLE", "FOLDABLE" ],
+    "damage_reduction": { "all": 6 }
+  },
+  {
     "type": "vehicle_part",
     "id": "basketlg_folding",
     "name": { "str": "folding shopping cart basket" },
