@@ -161,7 +161,7 @@
     "id": "HOLONOMIC",
     "type": "json_flag",
     "context": [ "vehicle_part" ],
-    "info": "This is omnidirectional wheel. If all vehicle wheels is omnidirectional, it can move in any direction and turn independently."
+    "info": "This is omnidirectional wheel. If all vehicle wheels is omnidirectional, it can move in any direction and turn independently and simulateously."
   },
   {
     "id": "STEERABLE",
@@ -199,6 +199,12 @@
     "type": "json_flag",
     "context": [ "vehicle_part" ],
     "info": "Provides up to <color_green>%sW</color> of electrical power to the vehicle when built over shallow moving water."
+  },
+  {
+    "id": "MOTOR_WHEEL",
+    "type": "json_flag",
+    "context": [ "vehicle_part" ],
+    "info": "This wheel contains an electric motor to drive it."
   },
   {
     "id": "FLAT_SURF",

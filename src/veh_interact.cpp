@@ -769,6 +769,51 @@ bool veh_interact::update_part_requirements()
         }
     }
 
+    int motor_wheels = 0;
+    int normal_engines = 0;
+
+    if (is_engine) {
+        if (sel_vpart_info->has_flag("MOTOR_WHEEL"))
+            motor_wheels++;
+        else
+            normal_engines++;
+
+            for (const vpart_reference &vp : veh->get_avail_parts("ENGINE")) {
+            if( vp.has_feature("MOTOR_WHEEL") )
+                motor_wheels++;
+            else
+                normal_engines++;
+        }
+    }
+
+    bool is_wheel = sel_vpart_info->has_flag( "WHEEL" );
+
+    int normal_wheels = 0;
+    int holonomic_wheels = 0;
+
+    // can't mix HOLONOMIC and normal wheels
+    if( is_wheel ) {
+        if (sel_vpart_info->has_flag("HOLONOMIC"))
+            holonomic_wheels++;
+        else
+            normal_wheels++;
+
+        for (const vpart_reference &vp : veh->get_avail_parts("WHEEL")) {
+            if (vp.has_feature("HOLONOMIC"))
+                holonomic_wheels++;
+            else
+                normal_wheels++;
+
+        }
+    }
+
+    // can't mix motor-wheels and normal engines
+    const bool holonomic_mix_engines = motor_wheels > 0 && normal_engines > 0;
+
+    // can't mix holonomic and normal wheels
+    const bool holonomic_mix_wheels = holonomic_wheels > 0 && normal_wheels > 0;
+
+
     int dif_steering = 0;
     if( sel_vpart_info->has_flag( "STEERABLE" ) ) {
         std::set<int> axles;
@@ -821,6 +866,17 @@ bool veh_interact::update_part_requirements()
                                status_color( player_character.get_skill_level( skill_mechanics ) >= dif_steering ),
                                skill_mechanics.obj().name(), dif_steering ) + "\n";
     }
+
+    if( holonomic_mix_engines ) {
+        ok = false;
+        msg += string_format( _( "> %1$scan't mix motor-wheels and normal engines.</color>" ), status_color( false ) ) + "\n";
+    }
+
+    if( holonomic_mix_wheels ) {
+        ok = false;
+        msg += string_format(_("> %1$scan't mix omnidirectional and normal wheels.</color>"), status_color(false)) + "\n";
+    }
+
 
     int lvl = 0;
     int str = 0;
