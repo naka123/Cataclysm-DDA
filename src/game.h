@@ -1027,7 +1027,7 @@ class game
         mutable std::array<float, OVERMAP_LAYERS> latest_lightlevels;
         // remoteveh() cache
         time_point remoteveh_cache_time;
-
+        vehicle *remoteveh_cache;
         /** Has a NPC been spawned since last load? */
         bool npcs_dirty = false;
         /** Has anything died in this turn and needs to be cleaned up? */
@@ -1058,9 +1058,6 @@ class game
 
         weak_ptr_fast<ui_adaptor> main_ui_adaptor;
     public:
-        // hack, for vehicle visibility in draw_vpart
-        vehicle *remoteveh_cache;
-
         /** Used to implement mouse "edge scrolling". Returns a
          *  tripoint which is a vector of the resulting "move", i.e.
          *  (0, 0, 0) if the mouse is not at the edge of the screen,
