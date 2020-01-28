@@ -1,0 +1,8 @@
+[
+  {
+    "type": "start_location",
+    "id": "radio_tower_top",
+    "name": "Radio Tower",
+    "terrain": [ "radio_tower_top" ]
+  }
+]

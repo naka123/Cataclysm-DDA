@@ -1,0 +1,13 @@
+[
+  {
+    "type": "scenario",
+    "ident": "radio_tower",
+    "name": "Radio Tower",
+    "points": 4,
+    "description": "-",
+    "allowed_locs": [ "radio_tower_top" ],
+    "start_name": "Radio Tower",
+    "professions": [ "afs_radio_technician" ],
+    "flags": [ "LONE_START" ]
+  }
+]
