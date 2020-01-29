@@ -1871,7 +1871,7 @@ vehicle *vehicle::act_on_map()
     }
 
     bool can_use_rails = this->can_use_rails();
-    if( one_in( 10 ) ) {
+    if( one_in( 600 ) ) {
         bool controlled = false;
         // It can even be a NPC, but must be at the controls
         for( int boarded : boarded_parts() ) {
