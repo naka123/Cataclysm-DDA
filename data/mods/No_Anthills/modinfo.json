@@ -7,7 +7,7 @@
     "description": "Removes ants and anthills from the game",
     "category": "monster_exclude",
     "dependencies": [ "dda" ],
-    "obsolete": true
+    "obsolete": false
   },
   {
     "type": "MONSTER_BLACKLIST",

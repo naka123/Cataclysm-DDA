@@ -7,7 +7,7 @@
     "description": "Removes bees and beehives from the game",
     "category": "monster_exclude",
     "dependencies": [ "dda" ],
-    "obsolete": true
+    "obsolete": false
   },
   {
     "type": "MONSTER_BLACKLIST",
