@@ -151,11 +151,10 @@ void vehicle::add_toggle_to_opts( std::vector<uilist_entry> &options,
 void handbrake()
 {
     Character &player_character = get_player_character();
-    const optional_vpart_position vp = get_map().veh_at( player_character.pos() );
-    if( !vp ) {
+    vehicle *const veh = g->get_posessed_vehicle( player_character.pos() );
+    if( !veh ) {
         return;
     }
-    vehicle *const veh = &vp->vehicle();
     add_msg( _( "You pull a handbrake." ) );
     veh->cruise_velocity = 0;
     if( veh->last_turn != 0_degrees && rng( 15, 60 ) * 100 < std::abs( veh->velocity ) ) {
