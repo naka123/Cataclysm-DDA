@@ -5309,6 +5309,7 @@ void game::control_vehicle()
     static const itype_id fuel_type_animal( "animal" );
     int veh_part = -1;
     vehicle *veh = remoteveh();
+    const bool is_remote = static_cast<bool>( veh );
     if( veh == nullptr ) {
         if( const optional_vpart_position vp = m.veh_at( u.pos() ) ) {
             veh = &vp->vehicle();
@@ -5316,8 +5317,8 @@ void game::control_vehicle()
         }
     }
     if( veh != nullptr && veh->player_in_control( u ) &&
-        veh->avail_part_with_feature( veh_part, "CONTROLS", true ) >= 0 ) {
-        veh->use_controls( u.pos() );
+        ( veh->avail_part_with_feature( veh_part, "CONTROLS", true ) >= 0 || is_remote ) ) {
+        veh->use_controls( u.pos(), is_remote );
     } else if( veh && veh->player_in_control( u ) &&
                veh->avail_part_with_feature( veh_part, "CONTROL_ANIMAL", true ) >= 0 ) {
         u.controlling_vehicle = false;
@@ -5344,6 +5345,9 @@ void game::control_vehicle()
         }
     } else {    // Start looking for nearby vehicle controls.
         int num_valid_controls = 0;
+        if( remoteveh() ) {
+            num_valid_controls++;
+        }
         cata::optional<tripoint> vehicle_position;
         cata::optional<vpart_reference> vehicle_controls;
         for( const tripoint elem : m.points_in_radius( g->u.pos(), 1 ) ) {
