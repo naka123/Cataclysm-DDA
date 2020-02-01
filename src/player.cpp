@@ -101,6 +101,7 @@ static const itype_id itype_large_repairkit( "large_repairkit" );
 static const itype_id itype_small_repairkit( "small_repairkit" );
 static const itype_id itype_UPS( "UPS" );
 static const itype_id itype_UPS_off( "UPS_off" );
+static const itype_id itype_remotevehcontrol("remotevehcontrol");
 
 static const trait_id trait_DEBUG_NODMG( "DEBUG_NODMG" );
 static const trait_id trait_CENOBITE( "CENOBITE" );
@@ -1218,6 +1219,12 @@ void player::process_items()
     if( ch_UPS_used > 0 ) {
         use_charges( itype_UPS, ch_UPS_used );
     }
+}
+
+bool player::can_view_remote_video() const
+{
+    // bio_remote don't provide video feed
+    return g->u.has_active_item( itype_remotevehcontrol );
 }
 
 bool player::add_faction_warning( const faction_id &id )
