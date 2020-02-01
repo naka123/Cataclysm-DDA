@@ -613,7 +613,7 @@ void vehicle::toggle_tracking()
     }
 }
 
-void vehicle::use_controls( const tripoint &pos )
+void vehicle::use_controls( const tripoint &pos, bool from_remote_controller )
 {
     std::vector<uilist_entry> options;
     std::vector<std::function<void()>> actions;
@@ -631,6 +631,9 @@ void vehicle::use_controls( const tripoint &pos )
             refresh();
         } );
 
+        has_electronic_controls = has_part( "CTRL_ELECTRONIC" ) || has_part( "REMOTE_CONTROLS" );
+
+    } else if( from_remote_controller ) {
         has_electronic_controls = has_part( "CTRL_ELECTRONIC" ) || has_part( "REMOTE_CONTROLS" );
 
     } else if( veh_pointer_or_null( get_map().veh_at( pos ) ) == this ) {

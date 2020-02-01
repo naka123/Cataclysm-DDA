@@ -8356,7 +8356,7 @@ int iuse::remoteveh( player *p, item *it, bool t, const tripoint &pos )
         if( empty( rctrl_parts ) ) {
             veh->use_controls( pos );
         } else {
-            veh->use_controls( rctrl_parts.begin()->pos() );
+            veh->use_controls( rctrl_parts.begin()->pos(), true );
         }
     }
 
