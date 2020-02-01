@@ -642,11 +642,10 @@ static void close()
 
 static void handbrake()
 {
-    const optional_vpart_position vp = g->m.veh_at( g->u.pos() );
-    if( !vp ) {
+    vehicle *const veh = g->get_posessed_vehicle( g->u.pos() );
+    if( !veh ) {
         return;
     }
-    vehicle *const veh = &vp->vehicle();
     add_msg( _( "You pull a handbrake." ) );
     veh->cruise_velocity = 0;
     if( veh->last_turn != 0 && rng( 15, 60 ) * 100 < std::abs( veh->velocity ) ) {
