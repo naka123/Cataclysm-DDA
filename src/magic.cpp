@@ -1408,7 +1408,7 @@ int known_magic::max_mana( const player &p ) const
     const float int_bonus = ( ( 0.2f + p.get_int() * 0.1f ) - 1.0f ) * mana_base;
     const float unaugmented_mana = std::max( 0.0f,
                                    ( ( mana_base + int_bonus ) * p.mutation_value( "mana_multiplier" ) ) +
-                                   p.mutation_value( "mana_modifier" ) - units::to_kilojoule( p.get_power_level() ) );
+                                   p.mutation_value( "mana_modifier" ) );
     return p.calculate_by_enchantment( unaugmented_mana, enchantment::mod::MAX_MANA, true );
 }
 
