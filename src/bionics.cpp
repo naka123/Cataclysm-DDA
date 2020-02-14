@@ -2728,6 +2728,7 @@ void bionic::toggle_auto_start_mod()
         tmenu.addentry( 2, true, 't', _( "Below 25 %%" ) );
         tmenu.addentry( 3, true, 'f', _( "Below 50 %%" ) );
         tmenu.addentry( 4, true, 's', _( "Below 75 %%" ) );
+        tmenu.addentry( 5, true, 'a', _( "Below 90 %%" ) );
         tmenu.query();
 
         switch( tmenu.ret ) {
@@ -2742,6 +2743,9 @@ void bionic::toggle_auto_start_mod()
                 break;
             case 4:
                 set_auto_start_thresh( 0.75 );
+                break;
+            case 5:
+                set_auto_start_thresh( 0.9 );
                 break;
             default:
                 break;
