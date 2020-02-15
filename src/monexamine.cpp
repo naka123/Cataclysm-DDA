@@ -84,6 +84,7 @@ bool monexamine::pet_menu( monster &z )
         remove_bat,
         insert_bat,
         check_bat,
+        disable_mech,
     };
 
     uilist amenu;
@@ -208,6 +209,7 @@ bool monexamine::pet_menu( monster &z )
         } else {
             amenu.addentry( insert_bat, false, 'x', _( "You need a %s to power this mech" ), type.nname( 1 ) );
         }
+        amenu.addentry( disable_mech, true, 'd', _( "Disable mech" ) );
     }
     amenu.query();
     int choice = amenu.ret;
@@ -275,6 +277,9 @@ bool monexamine::pet_menu( monster &z )
             break;
         case insert_bat:
             insert_battery( z );
+            break;
+        case disable_mech:
+            g->disable_robot( z.pos() );
             break;
         case check_bat:
         default:

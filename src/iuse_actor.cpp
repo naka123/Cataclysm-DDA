@@ -100,6 +100,7 @@ static const efftype_id effect_downed( "downed" );
 static const efftype_id effect_infected( "infected" );
 static const efftype_id effect_music( "music" );
 static const efftype_id effect_playing_instrument( "playing_instrument" );
+static const efftype_id effect_pet("pet");
 static const efftype_id effect_recover( "recover" );
 static const efftype_id effect_sleep( "sleep" );
 static const efftype_id effect_stunned( "stunned" );
@@ -926,6 +927,17 @@ int place_monster_iuse::use( player &p, item &it, bool, const tripoint & ) const
         }
         newmon.friendly = -1;
     }
+
+    if( newmon.has_flag( MF_RIDEABLE_MECH ) ) {
+        // spawning with empty battery, b/c old battery unloaded on despawn
+        newmon.battery_item.reset();
+
+        if( newmon.friendly = -1 ) {
+            // spawning already hacked, b/c can only despawn already hacked
+            newmon.add_effect( effect_pet, 1_turns, num_bp, true );
+        }
+    }
+
     // TODO: add a flag instead of monster id or something?
     if( newmon.type->id == mtype_id( "mon_laserturret" ) && !g->is_in_sunlight( newmon.pos() ) ) {
         p.add_msg_if_player( _( "A flashing LED on the laser turret appears to indicate low light." ) );
