@@ -6008,6 +6008,7 @@ int iuse::robotcontrol( player *p, item *it, bool active, const tripoint & )
         _( "Prepare IFF protocol override" ),
         _( "Set friendly robots to passive mode" ),
         _( "Set friendly robots to combat mode" ),
+        _( "Call for all friendly robots" ),
         _( "Deactivate friendly robot" )
     } );
     switch( choice ) {
@@ -6665,7 +6666,34 @@ int iuse::einktabletpc( player *p, item *it, bool t, const tripoint &pos )
             return it->type->charges_to_use();
         }
 
-        case 3: { // deactivate friendly robot
+        case 3: { // call for all friendly robots
+
+            const tripoint &player_pos = g->u.pos();
+
+            std::vector< shared_ptr_fast< monster> > mons;
+            std::vector< tripoint > locations;
+            int entry_num = 0;
+            for( monster &candidate : g->all_monsters() ) {
+                if( robotcontrol_can_target( p, candidate, true ) ) {
+                    mons.push_back( g->shared_from( candidate ) );
+                    if( candidate.can_move_to( player_pos ) ) {
+                        candidate.set_goal( player_pos );
+                        p->add_msg_if_player( m_info, _( "You called for %s." ), candidate.name() );
+                    } else {
+                        p->add_msg_if_player( m_info, _( "%s can't reach you." ), candidate.name() );
+                    }
+
+                }
+            }
+            if( mons.empty() ) {
+                p->add_msg_if_player( m_info, _( "No friendly robots in range." ) );
+                return it->type->charges_to_use();
+            } else {
+                return it->type->charges_to_use() * mons.size();
+            }
+        }
+
+        case 4: { // deactivate friendly robot
             uilist pick_robot;
             pick_robot.text = _( "Choose a friendly robot to deactivate." );
             // Build a list of all friendly robots in range.
