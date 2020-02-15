@@ -9477,7 +9477,6 @@ bool game::disable_robot( const tripoint &p )
     }
     monster &critter = *mon_ptr;
     if( ( critter.friendly == 0 && !critter.has_effect( effect_sensor_stun ) ) ||
-        critter.has_flag( MF_RIDEABLE_MECH ) ||
         ( critter.has_flag( MF_PAY_BOT ) && critter.has_effect( effect_paid ) ) ) {
         // Can only disable / reprogram friendly or stunned monsters
         return false;
@@ -9495,6 +9494,10 @@ bool game::disable_robot( const tripoint &p )
                     m.spawn_item( p.xy(), ammodef.first, 1, ammodef.second, calendar::turn );
                 }
             }
+        }         
+        if( critter.has_flag( MF_RIDEABLE_MECH ) && critter.battery_item ) {
+            g->m.add_item_or_charges( critter.pos(), *critter.battery_item );
+            critter.battery_item.reset();
         }
         remove_zombie( critter );
         return true;

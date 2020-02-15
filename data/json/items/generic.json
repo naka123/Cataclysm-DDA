@@ -1230,6 +1230,30 @@
     "flags": [ "TRADER_AVOID", "NO_REPAIR" ]
   },
   {
+    "type": "TOOL",
+    "id": "bot_mech_recon",
+    "name": "inactive recon mech",
+    "looks_like": "broken_mech_recon",
+    "description": "This is an inactive mech exoskeleton suit.  Using this item involves placing it on the ground and turning it on.  If reprogrammed and rewired successfully mech exoskeleton suit will respond to future commands.\"",
+    "weight": "700388 g",
+    "volume": "125 L",
+    "price": 1000,
+    "to_hit": -3,
+    "bashing": 7,
+    "material": [ "superalloy" ],
+    "symbol": ";",
+    "color": "light_green",
+    "flags": [ "TRADER_AVOID", "NO_REPAIR" ],
+    "use_action": {
+      "type": "place_monster",
+      "monster_id": "mon_mech_recon",
+      "difficulty": 8,
+      "moves": 1000,
+      "skill1": "electronics",
+      "skill2": "computer"
+    }
+  },
+  {
     "type": "GENERIC",
     "id": "broken_mech_lifter",
     "name": { "str": "broken mech lifter" },
@@ -1246,6 +1270,30 @@
     "flags": [ "TRADER_AVOID", "NO_REPAIR" ]
   },
   {
+    "type": "TOOL",
+    "id": "bot_mech_lifter",
+    "looks_like": "broken_mech_lifter",
+    "name": "inactive mech lifter",
+    "description": "This is an inactive mech exoskeleton suit.  Using this item involves placing it on the ground and turning it on.  If reprogrammed and rewired successfully mech exoskeleton suit will respond to future commands.\"",
+    "weight": "1280388 g",
+    "volume": "250 L",
+    "price": 1000,
+    "to_hit": -3,
+    "bashing": 8,
+    "material": [ "superalloy" ],
+    "symbol": ";",
+    "color": "light_green",
+    "flags": [ "TRADER_AVOID", "NO_REPAIR" ],
+    "use_action": {
+      "type": "place_monster",
+      "monster_id": "mon_mech_lifter",
+      "difficulty": 8,
+      "moves": 1000,
+      "skill1": "electronics",
+      "skill2": "computer"
+    }
+  },
+  {
     "type": "GENERIC",
     "id": "broken_mech_combat",
     "name": { "str": "broken combat mech" },
@@ -1260,6 +1308,30 @@
     "symbol": ";",
     "color": "light_green",
     "flags": [ "TRADER_AVOID", "NO_REPAIR" ]
+  },
+  {
+    "type": "TOOL",
+    "id": "bot_mech_combat",
+    "looks_like": "broken_mech_combat",
+    "name": "inactive combat mech",
+    "description": "This is an inactive mech exoskeleton suit.  Using this item involves placing it on the ground and turning it on.  If reprogrammed and rewired successfully mech exoskeleton suit will respond to future commands.\"",
+    "weight": "1480388 g",
+    "volume": "250 L",
+    "price": 1000,
+    "to_hit": -3,
+    "bashing": 8,
+    "material": [ "superalloy" ],
+    "symbol": ";",
+    "color": "light_green",
+    "flags": [ "TRADER_AVOID", "NO_REPAIR" ],
+    "use_action": {
+      "type": "place_monster",
+      "monster_id": "mon_mech_combat",
+      "difficulty": 8,
+      "moves": 1000,
+      "skill1": "electronics",
+      "skill2": "computer"
+    }
   },
   {
     "type": "GENERIC",
