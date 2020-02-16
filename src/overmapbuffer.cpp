@@ -722,6 +722,9 @@ std::vector<tripoint> overmapbuffer::get_npc_path( const tripoint &src, const tr
                                  !is_ot_match( "road_nesw_manhole", oter, ot_match_type::type ) ) ) {
             return pf::rejected;
         }
+        if( ptype.only_rails && ( !is_ot_match( "subway", oter, ot_match_type::type ) ) ) {
+            return pf::rejected;
+        }
         if( ptype.only_water && ( !is_river_or_lake( oter ) ||
                                   is_ot_match( "bridge", oter, ot_match_type::type ) ) ) {
             return pf::rejected;

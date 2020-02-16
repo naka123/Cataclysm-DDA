@@ -1494,6 +1494,8 @@ static tripoint display( const tripoint &orig, const draw_data_t &data = draw_da
                     ptype.only_water = true;
                 } else if( veh.is_rotorcraft() && veh.is_flying_in_air() ) {
                     ptype.only_air = true;
+                } else if( veh.can_use_rails() ) {
+                    ptype.only_rails = true;
                 } else {
                     ptype.only_road = true;
                 }
