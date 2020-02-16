@@ -3442,6 +3442,9 @@ bool vehicle::can_use_rails() const
     if( !can_use ) {
         return false;
     }
+
+    return true;
+
     bool is_wheel_on_rail = false;
     for( int part_index : rail_wheelcache ) {
         // at least one wheel should be on track
