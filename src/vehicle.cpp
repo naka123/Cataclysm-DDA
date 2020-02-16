@@ -791,7 +791,8 @@ void vehicle::drive_to_local_target( const tripoint &target, bool follow_protoco
     refresh();
     map &here = get_map();
     tripoint vehpos = here.getabs( global_pos3() );
-    units::angle angle = get_angle_from_targ( target );
+    // TODO turning on railway points
+    units::angle angle angle = can_use_rails() ? 0_degrees : get_angle_from_targ( target );
     // now we got the angle to the target, we can work out when we are heading towards disaster.
     // Check the tileray in the direction we need to head towards.
     std::set<point> points_to_check = immediate_path( angle );

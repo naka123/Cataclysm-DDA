@@ -38,6 +38,7 @@ struct regional_settings;
 struct path_type {
     bool only_road = false;
     bool only_water = false;
+    bool only_rails = false;
     bool amphibious = false;
     bool only_air = false;
     bool avoid_danger = false;

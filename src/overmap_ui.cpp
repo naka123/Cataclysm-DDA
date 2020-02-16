@@ -1603,6 +1603,8 @@ static tripoint_abs_omt display( const tripoint_abs_omt &orig,
                     ptype.only_water = true;
                 } else if( veh.is_rotorcraft() && veh.is_flying_in_air() ) {
                     ptype.only_air = true;
+                } else if( veh.can_use_rails() ) {
+                    ptype.only_rails = true;
                 } else {
                     ptype.only_road = true;
                 }
