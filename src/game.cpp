@@ -9491,7 +9491,7 @@ bool game::disable_robot( const tripoint &p )
         if( !critter.has_flag( MF_INTERIOR_AMMO ) ) {
             for( std::pair<const itype_id, int> &ammodef : critter.ammo ) {
                 if( ammodef.second > 0 ) {
-                    m.spawn_item( p.xy(), ammodef.first, 1, ammodef.second, calendar::turn );
+                    m.spawn_item( p, ammodef.first, 1, ammodef.second, calendar::turn );
                 }
             }
         }         
