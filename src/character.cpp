@@ -11938,7 +11938,7 @@ std::vector<Creature *> Character::get_targetable_creatures( const int range, bo
         {
             std::vector<tripoint> path = here.find_clear_path( pos(), critter.pos() );
             for( const tripoint &point : path ) {
-                if( here.impassable( point ) &&
+                if( here.impassable( point ) && !g->m.is_transparent( point ) &&
                     !( weapon.has_flag( flag_SPEAR ) && // Fences etc. Spears can stab through those
                        here.has_flag( STATIC( "THIN_OBSTACLE" ),
                                       point ) ) ) { //this mirrors melee.cpp function reach_attack
