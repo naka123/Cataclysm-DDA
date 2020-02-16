@@ -102,12 +102,13 @@
     "rolling_resistance": 0.25,
     "wheel_type": "rail",
     "contact_area": 80,
+	"folded_volume": "8750 ml",
     "requirements": {
       "install": { "skills": [ [ "mechanics", 2 ] ], "time": "60 m", "using": [ [ "vehicle_bolt", 1 ] ] },
       "removal": { "skills": [ [ "mechanics", 2 ] ], "time": "30 m", "using": [ [ "vehicle_bolt", 1 ] ] },
       "repair": { "skills": [ [ "mechanics", 3 ] ], "time": "60 m", "using": [ [ "welding_standard", 5 ] ] }
     },
-    "flags": [ "WHEEL", "NEEDS_JACKING", "RAIL" ],
+    "flags": [ "WHEEL", "NEEDS_JACKING", "RAIL", "FOLDABLE" ],
     "damage_reduction": { "all": 66 }
   },
   {
