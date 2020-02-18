@@ -5246,7 +5246,7 @@ std::vector<Creature *> player::get_targetable_creatures( const int range ) cons
         {
             std::vector<tripoint> path = g->m.find_clear_path( pos(), critter.pos() );
             for( const tripoint &point : path ) {
-                if( g->m.impassable( point ) && !g->m.is_transparent( point ) ) {
+                if( g->m.impassable( point ) && !g->m.is_transparent( point ) && !g->m.veh_at( pos() ) ) {
                     can_see = false;
                     break;
                 }
