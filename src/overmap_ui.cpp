@@ -1606,7 +1606,13 @@ static tripoint_abs_omt display( const tripoint_abs_omt &orig,
                 } else if( veh.can_use_rails() ) {
                     ptype.only_rails = true;
                 } else {
-                    ptype.only_road = true;
+                    const int offroad_pct = veh.k_traction( veh.wheel_area() *
+                                                            veh.average_or_rating() ) * 100;
+                    if( offroad_pct >= 66 ) {
+                        ptype.offroad = true;
+                    } else {
+                        ptype.only_road = true;
+                    }
                 }
             } else {
                 const oter_id oter = overmap_buffer.ter( curs );

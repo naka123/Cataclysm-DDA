@@ -742,12 +742,19 @@ std::vector<tripoint_abs_omt> overmapbuffer::get_npc_path(
         if( ptype.avoid_danger && is_marked_dangerous( convert_result ) ) {
             return pf::rejected;
         }
+        if( ptype.offroad && ( !is_ot_match( "field", oter, ot_match_type::type ) &&
+                               !is_ot_match( "road", oter, ot_match_type::type ) &&
+                               !is_ot_match( "bridge", oter, ot_match_type::type ) &&
+                               !is_ot_match( "road_nesw_manhole", oter, ot_match_type::type ) ) ) {
+            return pf::rejected;
+        }
         if( ptype.only_road && ( !is_ot_match( "road", oter, ot_match_type::type ) &&
                                  !is_ot_match( "bridge", oter, ot_match_type::type ) &&
                                  !is_ot_match( "road_nesw_manhole", oter, ot_match_type::type ) ) ) {
             return pf::rejected;
         }
-        if( ptype.only_rails && ( !is_ot_match( "subway", oter, ot_match_type::type ) ) ) {
+        if( ptype.only_rails && ( !is_ot_match( "subway", oter, ot_match_type::type ) && 
+                                  !is_ot_match( "sewer_sub_station", oter, ot_match_type::type ) ) ) {
             return pf::rejected;
         }
         if( ptype.only_water && !is_river_or_lake( oter ) ) {
