@@ -716,8 +716,13 @@ bool can_interact_at( action_id action, const tripoint &p )
     map &here = get_map();
     tripoint player_pos = get_player_character().pos();
     switch( action ) {
-        case ACTION_OPEN:
-            return here.open_door( p, !here.is_outside( player_pos ), true );
+        case ACTION_OPEN: {
+            const optional_vpart_position vp = here.veh_at( p );
+            return ( vp &&
+                     vp->vehicle().next_part_to_open( vp->part_index(),
+                             veh_pointer_or_null( here.veh_at( player_pos ) ) != &vp->vehicle() ) >= 0 ) ||
+                    here.open_door( p, !here.is_outside( player_pos ), true );
+        }
         case ACTION_CLOSE: {
             const optional_vpart_position vp = here.veh_at( p );
             return ( vp &&
