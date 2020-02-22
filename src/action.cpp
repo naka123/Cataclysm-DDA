@@ -705,8 +705,13 @@ static bool can_pickup_at( const tripoint &p )
 bool can_interact_at( action_id action, const tripoint &p )
 {
     switch( action ) {
-        case ACTION_OPEN:
-            return g->m.open_door( p, !g->m.is_outside( g->u.pos() ), true );
+        case ACTION_OPEN: {
+            const optional_vpart_position vp = g->m.veh_at( p );
+            return ( vp &&
+                     vp->vehicle().next_part_to_open( vp->part_index(),
+                             veh_pointer_or_null( g->m.veh_at( g->u.pos() ) ) != &vp->vehicle() ) >= 0 ) ||
+                   g->m.open_door( p, !g->m.is_outside( g->u.pos() ), true );
+        }
         case ACTION_CLOSE: {
             const optional_vpart_position vp = g->m.veh_at( p );
             return ( vp &&
