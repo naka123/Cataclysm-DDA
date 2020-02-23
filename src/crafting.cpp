@@ -1947,6 +1947,8 @@ bool Character::craft_consume_tools( item &craft, int multiplier, bool start_cra
     inventory map_inv;
     map_inv.form_from_map( pos(), PICKUP_RANGE, this );
 
+    const itype_id itype_null( "null" );
+
     for( const comp_selection<tool_comp> &tool_sel : cached_tool_selections ) {
         itype_id type = tool_sel.comp.type;
         if( tool_sel.comp.count > 0 ) {
@@ -1986,7 +1988,7 @@ bool Character::craft_consume_tools( item &craft, int multiplier, bool start_cra
                 case usage_from::num_usages_from:
                     break;
             }
-        } else if( !has_amount( type, 1 ) && !map_inv.has_tools( type, 1 ) ) {
+        } else if( !has_amount( type, 1 ) && !map_inv.has_tools( type, 1 ) && type != itype_null ) {
             add_msg_player_or_npc(
                 _( "You no longer have a %s and can't continue crafting" ),
                 _( "<npcname> no longer has a %s and can't continue crafting" ),
