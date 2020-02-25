@@ -8071,8 +8071,11 @@ static void sendRadioSignal( player &p, const flag_id &signal )
         for( item &it : here.i_at( loc ) ) {
             if( it.has_flag( flag_RADIO_ACTIVATION ) && it.has_flag( signal ) ) {
                 sounds::sound( p.pos(), 6, sounds::sound_t::alarm, _( "beep" ), true, "misc", "beep" );
-                if( it.has_flag( flag_RADIO_INVOKE_PROC ) ) {
+                if( it.has_flag( "BOMB" ) ) {
                     // Invoke to transform a radio-modded explosive into its active form
+                    it.type->invoke( p, it, loc );
+                    it.ammo_unset();
+                } else { 
                     it.type->invoke( p, it, loc );
                 }
             } else if( !it.contents.empty_container() ) {
@@ -8082,9 +8085,14 @@ static void sendRadioSignal( player &p, const flag_id &signal )
 
                 if( itm != nullptr ) {
                     sounds::sound( p.pos(), 6, sounds::sound_t::alarm, _( "beep" ), true, "misc", "beep" );
-                    // Invoke to transform a radio-modded explosive into its active form
-                    if( itm->has_flag( flag_RADIO_INVOKE_PROC ) ) {
+                    // Invoke twice: first to transform, then later to proc
+                    if( itm->has_flag( "BOMB" ) ) {
                         itm->type->invoke( p, *itm, loc );
+                        itm->ammo_unset();
+                        // The type changed
+                    } else {
+                        itm->type->invoke( p, *itm, loc );
+                        //it.contents.clear_items();
                     }
                 }
             }
