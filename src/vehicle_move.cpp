@@ -433,7 +433,7 @@ bool vehicle::collision( std::vector<veh_collision> &colls,
         const tripoint dsp = global_pos3() + dp + parts[p].precalc[1];
         veh_collision coll = part_collision( p, dsp, just_detect, bash_floor );
         if( coll.type == veh_coll_nothing && info.rotor_diameter() > 0 ) {
-            for( const tripoint &rotor_point : g->m.points_in_radius( dsp, info.rotor_diameter() ) ) {
+            for( const tripoint &rotor_point : g->m.points_in_radius( dsp, info.rotor_diameter() / 2 ) ) {
                 veh_collision rotor_coll = part_collision( p, rotor_point, just_detect, false );
                 if( rotor_coll.type != veh_coll_nothing ) {
                     coll = rotor_coll;
