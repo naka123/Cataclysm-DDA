@@ -2451,14 +2451,35 @@ void veh_interact::display_stats() const
 
     bool is_boat = !veh->floating.empty();
     bool is_ground = !veh->wheelcache.empty() || !is_boat;
-    bool is_aircraft = veh->is_rotorcraft() && veh->is_flying_in_air();
+    bool is_flying_rotorcraft = veh->is_rotorcraft() && veh->is_flying_in_air();
 
     const auto vel_to_int = []( const double vel ) {
         return static_cast<int>( convert_velocity( vel, VU_VEHICLE ) );
     };
 
     int i = 0;
-    if( is_aircraft ) {
+
+    if( veh->has_part("ROTOR") ) {
+
+        float have_lift = veh->lift_thrust_of_rotorcraft(true);
+        if( isnan( have_lift ) ) {
+            have_lift = 0;
+        }
+        const float need_lift = to_kilogram(veh->total_mass()) * 9.8;
+
+        std::string draft_string = have_lift > need_lift ?
+                                   _( "Lift have/need: <color_light_green>%.2f</color> / <color_light_blue>%.2f</color> tf" ) :
+                                   _( "Lift have/need: <color_light_red>%.2f</color> / <color_light_blue>%.2f</color> tf" );
+
+        fold_and_print( w_stats, point( x[i], y[i] ), w[i], c_light_gray,
+                        draft_string.c_str(),
+                        have_lift / 1000. ,
+                        need_lift / 1000. );
+        i += 1;
+
+    }
+
+    if( is_flying_rotorcraft ) {
         fold_and_print( w_stats, point( x[i], y[i] ), w[i], c_light_gray,
                         _( "Air Safe/Top Speed: <color_light_green>%3d</color>/<color_light_red>%3d</color> %s" ),
                         vel_to_int( veh->safe_rotor_velocity( false ) ),
