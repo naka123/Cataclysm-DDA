@@ -130,6 +130,8 @@ bool vertical_move_destination( const map &m, tripoint &t )
         m.getlocal( rc.begin_om_pos() )
     );
 
+    return false;
+
     const auto &pf_cache = m.get_pathfinding_cache_ref( t.z );
     for( int x = omtile_align_start.x; x < omtile_align_start.x + omtilesz.x; x++ ) {
         for( int y = omtile_align_start.y; y < omtile_align_start.y + omtilesz.y; y++ ) {
