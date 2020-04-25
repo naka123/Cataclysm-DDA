@@ -783,13 +783,20 @@ void vehicle::stop_autodriving()
 
 void vehicle::drive_to_local_target( const tripoint &target, bool follow_protocol )
 {
+    refresh();
+    map &here = get_map();
+
     Character &player_character = get_player_character();
-    if( follow_protocol && player_character.in_vehicle ) {
+    const bool player_in_another_vehicle;
+    if ( ! ( veh_pointer_or_null( here.veh_at( player_character.pos() ) ) == this )) {
+        player_in_another_vehicle = player_character.in_vehicle;
+    } else {
+        player_in_another_vehicle = false;
+    }
+    if( follow_protocol && player_character.in_vehicle && !player_in_another_vehicle ) {
         stop_autodriving();
         return;
     }
-    refresh();
-    map &here = get_map();
     tripoint vehpos = here.getabs( global_pos3() );
     // TODO turning on railway points
     units::angle angle angle = can_use_rails() ? 0_degrees : get_angle_from_targ( target );
@@ -857,8 +864,11 @@ void vehicle::drive_to_local_target( const tripoint &target, bool follow_protoco
     // we really want to avoid running the player over.
     // If its a helicopter, we dont need to worry about airborne obstacles so much
     // And fuel efficiency is terrible at low speeds.
-    const int safe_player_follow_speed = 400 *
-                                         player_character.current_movement_mode()->move_speed_mult();
+    int safe_player_follow_speed = 400 * player_character.current_movement_mode()->move_speed_mult();
+
+    if( player_in_another_vehicle && rl_dist( vehpos, here.getabs( player_character.pos() ) ) > 20 ) {
+        safe_player_follow_speed = 25000;
+    }
     if( follow_protocol ) {
         if( ( ( turn_x > 0 || turn_x < 0 ) && velocity > safe_player_follow_speed ) ||
             rl_dist( vehpos, here.getabs( player_character.pos() ) ) < 7 + ( ( mount_max.y * 3 ) + 4 ) ) {
