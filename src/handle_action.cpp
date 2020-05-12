@@ -1615,8 +1615,9 @@ bool game::handle_action()
     }
 
     const optional_vpart_position vp = m.veh_at( player_character.pos() );
+    const vehicle *veh = &( vp->vehicle() );
     bool veh_ctrl = !player_character.is_dead_state() &&
-                    ( ( vp && vp->vehicle().player_in_control( player_character ) ) || remoteveh() != nullptr );
+                    ( ( vp && veh->player_in_control( player_character ) ) || remoteveh() != nullptr );
 
     bool veh_ctrl_holo = false;
     if( veh_ctrl ) {
@@ -1936,8 +1937,14 @@ bool game::handle_action()
                 }
                 if( !player_character.in_vehicle ) {
                     vertical_move( 1, false );
-                } else if( veh_ctrl && vp->vehicle().is_rotorcraft() ) {
-                    pldrive( tripoint_above );
+                }
+                else if (veh_ctrl) {
+                    if (veh->is_rotorcraft()) {
+                        pldrive( tripoint_above );
+                    }
+                    else if (veh->has_part("ROTOR") && !veh->has_sufficient_rotorlift()) {
+                        add_msg(m_info, _("Rotorcraft is too heavy to take off."));
+                    }
                 }
                 }
                 break;
