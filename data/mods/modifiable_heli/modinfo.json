@@ -1,0 +1,11 @@
+[
+  {
+    "type": "MOD_INFO",
+    "ident": "modifiable_heli",
+    "name": "Modifiable Helicopters",
+    "authors": [ "naka123" ],
+    "description": "Modifiable Helicopters",
+    "category": "content",
+    "dependencies": [ "dda" ]
+  }
+]

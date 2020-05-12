@@ -1,0 +1,8 @@
+[
+  {
+    "id": "small_civilian_rotors",
+    "copy-from": "small_civilian_rotors",
+    "type": "vehicle_part",
+    "flags": [ "ROTOR", "NO_INSTALL_PLAYER", "NO_UNINSTALL", "NO_REPAIR" ]
+  }
+]
