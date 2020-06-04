@@ -789,6 +789,8 @@ bool veh_interact::update_part_requirements()
     bool is_wheel = sel_vpart_info->has_flag( "WHEEL" );
 
     int normal_wheels = 0;
+
+    /*
     int holonomic_wheels = 0;
 
     // can't mix HOLONOMIC and normal wheels
@@ -812,7 +814,7 @@ bool veh_interact::update_part_requirements()
 
     // can't mix holonomic and normal wheels
     const bool holonomic_mix_wheels = holonomic_wheels > 0 && normal_wheels > 0;
-
+    */
 
     int dif_steering = 0;
     if( sel_vpart_info->has_flag( "STEERABLE" ) ) {
@@ -867,6 +869,7 @@ bool veh_interact::update_part_requirements()
                                skill_mechanics.obj().name(), dif_steering ) + "\n";
     }
 
+    /*
     if( holonomic_mix_engines ) {
         ok = false;
         msg += string_format( _( "> %1$scan't mix motor-wheels and normal engines.</color>" ), status_color( false ) ) + "\n";
@@ -876,6 +879,7 @@ bool veh_interact::update_part_requirements()
         ok = false;
         msg += string_format(_("> %1$scan't mix omnidirectional and normal wheels.</color>"), status_color(false)) + "\n";
     }
+    */
 
 
     int lvl = 0;
