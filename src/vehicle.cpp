@@ -787,7 +787,7 @@ void vehicle::drive_to_local_target( const tripoint &target, bool follow_protoco
     map &here = get_map();
 
     Character &player_character = get_player_character();
-    const bool player_in_another_vehicle;
+    bool player_in_another_vehicle;
     if ( ! ( veh_pointer_or_null( here.veh_at( player_character.pos() ) ) == this )) {
         player_in_another_vehicle = player_character.in_vehicle;
     } else {
