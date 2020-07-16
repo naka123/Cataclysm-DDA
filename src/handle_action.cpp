@@ -473,15 +473,17 @@ inline static void pldrive( point d )
 
 static void pldrive_holonomic( int x, int y, int turn )
 {
+    Character& player_character = get_player_character();
+    map& here = get_map();
+
     if( !g->check_safe_mode_allowed() ) {
         return;
     }
-    player &u = g->u;
     vehicle *veh = g->remoteveh();
     bool remote = true;
     int part = -1;
     if( !veh ) {
-        if( const optional_vpart_position vp = g->m.veh_at( u.pos() ) ) {
+        if( const optional_vpart_position vp = here.veh_at( player_character.pos() ) ) {
             veh = &vp->vehicle();
             part = vp->part_index();
         }
@@ -490,14 +492,14 @@ static void pldrive_holonomic( int x, int y, int turn )
     if( !veh ) {
         dbg( D_ERROR ) << "game::pldrive_holonomic: can't find vehicle!  Drive mode is now off.";
         debugmsg( "game::pldrive_holonomic error: can't find vehicle!  Drive mode is now off." );
-        u.in_vehicle = false;
+        player_character.in_vehicle = false;
         return;
     }
     if( !remote ) {
         int pctr = veh->part_with_feature( part, "CONTROLS", true );
         if( pctr < 0 ) {
             add_msg( m_info, _( "You can't drive the vehicle from here.  You need controls!" ) );
-            u.controlling_vehicle = false;
+            player_character.controlling_vehicle = false;
             return;
         }
     } else {
