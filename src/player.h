@@ -353,8 +353,6 @@ class player : public Character
 
         void process_items();
 
-        bool can_view_remote_video() const;
-
         // ---------------VALUES-----------------
         tripoint view_offset;
         // Relative direction of a grab, add to posx, posy to get the coordinates of the grabbed thing.

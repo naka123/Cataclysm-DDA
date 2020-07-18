@@ -882,6 +882,9 @@ class Character : public Creature, public visitable
         bool can_autolearn( const matype_id &ma_id ) const;
         /** Returns true if the player is able to use a grab breaking technique */
         bool can_grab_break( const item &weap ) const;
+
+        bool can_view_remote_video() const;
+
     private:
         /** Check if an area-of-effect technique has valid targets */
         bool valid_aoe_technique( Creature &t, const ma_technique &technique );

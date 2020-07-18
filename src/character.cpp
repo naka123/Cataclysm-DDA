@@ -225,6 +225,7 @@ static const itype_id itype_string_36( "string_36" );
 static const itype_id itype_toolset( "toolset" );
 static const itype_id itype_UPS( "UPS" );
 static const itype_id itype_UPS_off( "UPS_off" );
+static const itype_id itype_remotevehcontrol("remotevehcontrol");
 
 static const skill_id skill_archery( "archery" );
 static const skill_id skill_dodge( "dodge" );
@@ -13072,4 +13073,10 @@ int Character::book_fun_for( const item &book, const Character &p ) const
     }
 
     return fun_bonus;
+}
+
+bool Character::can_view_remote_video() const
+{
+    // bio_remote don't provide video feed
+    return has_active_item( itype_remotevehcontrol );
 }

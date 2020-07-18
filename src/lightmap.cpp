@@ -1025,7 +1025,7 @@ void map::build_seen_cache( const tripoint &origin, const int target_z )
             seen_caches, transparency_caches, floor_caches, origin, 0, 1.0, directions_to_cast );
     }
 
-    const bool can_view_remote = static_cast<bool>( g->remoteveh() ) && g->u.can_view_remote_video();
+    const bool can_view_remote = static_cast<bool>( g->remoteveh() ) && get_player_character().can_view_remote_video();
     vehicle *const veh = g->get_posessed_vehicle( origin );
     if ( !veh )
         return;
