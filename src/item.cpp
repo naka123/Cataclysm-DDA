@@ -8582,10 +8582,15 @@ int item::getlight_emit() const
         ( has_flag( flag_USE_UPS ) && ammo_capacity( ammotype( "battery" ) ) == 0 ) ) {
         return lumint;
     }
-    if( lumint == 0 || ammo_remaining() == 0 ) {
+    if( lumint == 0 ) {
         return 0;
     }
-    if( has_flag( flag_CHARGEDIM ) && is_tool() && !has_flag( flag_USE_UPS ) ) {
+    if ( is_tool() && has_flag( flag_USE_UPS ) && units_remaining( get_player_character(), 100 ) > 10 ) {
+        return lumint;
+    } else if( ammo_remaining() == 0 ) {
+        return 0;
+    }
+    if( has_flag( flag_CHARGEDIM ) ) {
         // Falloff starts at 1/5 total charge and scales linearly from there to 0.
         const ammotype &loaded_ammo = ammo_data()->ammo->type;
         if( ammo_capacity( loaded_ammo ) && ammo_remaining() < ( ammo_capacity( loaded_ammo ) / 5 ) ) {
