@@ -6670,7 +6670,7 @@ int iuse::einktabletpc( player *p, item *it, bool t, const tripoint &pos )
 
         case 3: { // call for all friendly robots
 
-            const tripoint &player_pos = g->u.pos();
+            const tripoint &player_pos = get_avatar().pos();
 
             std::vector< shared_ptr_fast< monster> > mons;
             std::vector< tripoint > locations;

@@ -1470,23 +1470,24 @@ void vehicle::pldrive( const point &p, int z )
 // x, y - movement vector, z - turn direction
 void vehicle::pldrive_holonomic( const tripoint &p )
 {
+    player& player_character = get_avatar();
+
     if( !is_holonomic() ) {
         add_msg( m_info, _( "The vehicle is not omnidirectional." ) );
         return;
     }
 
-    player &u = g->u;
     int turn_delta = 15 * -p.z;
 
     const float handling_diff = handling_difficulty();
     if( turn_delta != 0 && decoupled_on ) {
         turn( turn_delta );
         cruise_velocity = 0;
-        u.moves = 0;
+        player_character.moves = 0;
     } else if( p.x != 0 || p.y != 0 ) {
         move.init( point( p.x, p.y ) );
         cruise_velocity = std::min( static_cast<int>(vehicles::vmiph_per_tile), safe_velocity() );
-        u.moves = 0;
+        player_character.moves = 0;
     }
 
     // TODO: Actually check if we're on land on water (or disable water-skidding)
@@ -1494,9 +1495,9 @@ void vehicle::pldrive_holonomic( const tripoint &p )
         ///\EFFECT_DEX increases chance of regaining control of a vehicle
 
         ///\EFFECT_DRIVING increases chance of regaining control of a vehicle
-        if( handling_diff * rng( 1, 10 ) < u.dex_cur + u.get_skill_level( skill_driving ) * 2 ) {
+        if( handling_diff * rng( 1, 10 ) < player_character.dex_cur + player_character.get_skill_level( skill_driving ) * 2 ) {
             add_msg( _( "You regain control of the %s." ), name );
-            u.practice( skill_driving, velocity / 5 );
+            player_character.practice( skill_driving, velocity / 5 );
             skidding = false;
         }
     }
