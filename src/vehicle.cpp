@@ -4911,6 +4911,11 @@ void vehicle::power_parts()
     int battery_left, battery_capacity;
     std::tie( battery_left, battery_capacity ) = battery_power_level();
     int storage_deficit_bat = std::max( 0, battery_capacity - battery_left - delta_energy_bat );
+
+    if( battery_capacity > 0 && ( (float)battery_left / battery_capacity ) > 0.5 ) {
+        storage_deficit_bat = 0;
+    }
+
     Character &player_character = get_player_character();
     // Reactors trigger only on demand. If we'd otherwise run out of power, see
     // if we can spin up the reactors.
