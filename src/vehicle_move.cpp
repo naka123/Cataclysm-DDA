@@ -198,6 +198,9 @@ void vehicle:: smart_controller_handle_turn( bool thrusting,
                        ? // using avg_velocity reduces unnecessary oscillations when traction is low
                        std::max( std::abs( cruise_velocity - velocity ), std::abs( cruise_velocity - avg_velocity ) ) :
                        ( thrusting ? 1000 : 0 );
+
+    bool cruise_braking = cruise_on ? abs( cruise_velocity - avg_velocity) != ( cruise_velocity - avg_velocity) : false;
+
     if( velocity != 0 && accel_demand == 0 ) {
         accel_demand = 1;    // to prevent zero fuel usage
     }
@@ -306,6 +309,7 @@ void vehicle:: smart_controller_handle_turn( bool thrusting,
 
         if( std::forward_as_tuple(
                 !discharge_forbidden_hard || ( net_echarge_rate > 0 ),
+                !cruise_braking,
                 accel >= accel_demand,
                 opt_accel < accel_demand ? accel : 0, // opt_accel usage here is intentional
                 safe_vel >= velocity_demand,
@@ -315,6 +319,7 @@ void vehicle:: smart_controller_handle_turn( bool thrusting,
                 net_echarge_rate
             ) >= std::forward_as_tuple(
                 !discharge_forbidden_hard || ( opt_net_echarge_rate > 0 ),
+                !cruise_braking,
                 opt_accel >= accel_demand,
                 opt_accel < accel_demand ? opt_accel : 0,
                 opt_safe_vel >= velocity_demand,
