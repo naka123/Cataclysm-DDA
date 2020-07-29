@@ -4912,7 +4912,15 @@ void vehicle::power_parts()
     std::tie( battery_left, battery_capacity ) = battery_power_level();
     int storage_deficit_bat = std::max( 0, battery_capacity - battery_left - delta_energy_bat );
 
-    if( battery_capacity > 0 && ( (float)battery_left / battery_capacity ) > 0.5 ) {
+    // get settings or defaults
+    smart_controller_config cfg = smart_controller_cfg.value_or( smart_controller_config() );
+
+    // ensure sane values
+    cfg.battery_hi = clamp( cfg.battery_hi, 0, 100 );
+    cfg.battery_lo = clamp( cfg.battery_lo, 0, cfg.battery_hi );
+
+
+    if( battery_capacity > 0 && ( 100 * battery_left / battery_capacity ) > cfg.battery_lo ) {
         storage_deficit_bat = 0;
     }
 
