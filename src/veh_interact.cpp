@@ -1065,6 +1065,7 @@ void veh_interact::do_install()
                 }
                 // Modifying a vehicle with rotors will make in not flightworthy
                 // (until we've got a better model)
+                /*
                 // It can only be the player doing this - an npc won't work well with query_yn
                 if( veh->would_install_prevent_flyable( *sel_vpart_info, player_character ) ) {
                     if( query_yn(
@@ -1075,6 +1076,7 @@ void veh_interact::do_install()
                         return;
                     }
                 }
+                */
                 if( veh->is_foldable() && !sel_vpart_info->has_flag( "FOLDABLE" ) &&
                     !query_yn( _( "Installing this part will make the vehicle unfoldable. "
                                   " Continue?" ) ) ) {
@@ -1963,6 +1965,7 @@ void veh_interact::do_remove()
                     break;
             }
 
+            /*
             // Modifying a vehicle with rotors will make in not flightworthy (until we've got a better model)
             // It can only be the player doing this - an npc won't work well with query_yn
             if( veh->would_removal_prevent_flyable( veh->part( part ), player_character ) ) {
@@ -1973,6 +1976,7 @@ void veh_interact::do_remove()
                     return;
                 }
             }
+            */
             const std::vector<npc *> helpers = player_character.get_crafting_helpers();
             for( const npc *np : helpers ) {
                 add_msg( m_info, _( "%s helps with this task…" ), np->name );
