@@ -6095,6 +6095,77 @@ int iuse::robotcontrol( player *p, item *it, bool active, const tripoint & )
             }
             return it->type->charges_to_use();
         }
+
+        case 3: { // call for all friendly robots
+
+            const tripoint &player_pos = get_avatar().pos();
+
+            std::vector< shared_ptr_fast< monster> > mons;
+            std::vector< tripoint > locations;
+            int entry_num = 0;
+            for( monster &candidate : g->all_monsters() ) {
+                if( robotcontrol_can_target( p, candidate, true ) ) {
+                    mons.push_back( g->shared_from( candidate ) );
+                    if( candidate.can_move_to( player_pos ) ) {
+                        candidate.set_goal( player_pos );
+                        p->add_msg_if_player( m_info, _( "You called for %s." ), candidate.name() );
+                    } else {
+                        p->add_msg_if_player( m_info, _( "%s can't reach you." ), candidate.name() );
+                    }
+
+                }
+            }
+            if( mons.empty() ) {
+                p->add_msg_if_player( m_info, _( "No friendly robots in range." ) );
+                return it->type->charges_to_use();
+            } else {
+                return it->type->charges_to_use() * mons.size();
+            }
+        }
+
+        case 4: { // deactivate friendly robot
+            uilist pick_robot;
+            pick_robot.text = _( "Choose a friendly robot to deactivate." );
+            // Build a list of all friendly robots in range.
+            // TODO: change into vector<Creature*>
+            std::vector< shared_ptr_fast< monster> > mons;
+            std::vector< tripoint > locations;
+            int entry_num = 0;
+            for( const monster &candidate : g->all_monsters() ) {
+                if( robotcontrol_can_target( p, candidate, true ) ) {
+                    mons.push_back( g->shared_from( candidate ) );
+                    pick_robot.addentry( entry_num++, true, MENU_AUTOASSIGN, candidate.name() );
+                    tripoint seen_loc;
+                    // Show locations of seen robots, center on player if robot is not seen
+                    if( p->sees( candidate ) ) {
+                        seen_loc = candidate.pos();
+                    } else {
+                        seen_loc = p->pos();
+                    }
+                    locations.push_back( seen_loc );
+                }
+            }
+            if( mons.empty() ) {
+                p->add_msg_if_player( m_info, _( "No friendly robots in range." ) );
+                return it->type->charges_to_use();
+            }
+            pointmenu_cb callback( locations );
+            pick_robot.callback = &callback;
+            pick_robot.query();
+            if( pick_robot.ret < 0 || static_cast<size_t>( pick_robot.ret ) >= mons.size() ) {
+                p->add_msg_if_player( m_info, _( "Never mind" ) );
+                return it->type->charges_to_use();
+            }
+            const size_t mondex = pick_robot.ret;
+            shared_ptr_fast< monster > z = mons[mondex];
+
+            if( g->disable_robot( z->pos() ) ) {
+                p->add_msg_if_player( _( "You deactivated %s." ), z->name() );
+            }
+
+            return it->type->charges_to_use();
+
+        }
     }
     return 0;
 }
@@ -6668,76 +6739,6 @@ int iuse::einktabletpc( player *p, item *it, bool t, const tripoint &pos )
             return it->type->charges_to_use();
         }
 
-        case 3: { // call for all friendly robots
-
-            const tripoint &player_pos = get_avatar().pos();
-
-            std::vector< shared_ptr_fast< monster> > mons;
-            std::vector< tripoint > locations;
-            int entry_num = 0;
-            for( monster &candidate : g->all_monsters() ) {
-                if( robotcontrol_can_target( p, candidate, true ) ) {
-                    mons.push_back( g->shared_from( candidate ) );
-                    if( candidate.can_move_to( player_pos ) ) {
-                        candidate.set_goal( player_pos );
-                        p->add_msg_if_player( m_info, _( "You called for %s." ), candidate.name() );
-                    } else {
-                        p->add_msg_if_player( m_info, _( "%s can't reach you." ), candidate.name() );
-                    }
-
-                }
-            }
-            if( mons.empty() ) {
-                p->add_msg_if_player( m_info, _( "No friendly robots in range." ) );
-                return it->type->charges_to_use();
-            } else {
-                return it->type->charges_to_use() * mons.size();
-            }
-        }
-
-        case 4: { // deactivate friendly robot
-            uilist pick_robot;
-            pick_robot.text = _( "Choose a friendly robot to deactivate." );
-            // Build a list of all friendly robots in range.
-            // TODO: change into vector<Creature*>
-            std::vector< shared_ptr_fast< monster> > mons;
-            std::vector< tripoint > locations;
-            int entry_num = 0;
-            for( const monster &candidate : g->all_monsters() ) {
-                if( robotcontrol_can_target( p, candidate, true ) ) {
-                    mons.push_back( g->shared_from( candidate ) );
-                    pick_robot.addentry( entry_num++, true, MENU_AUTOASSIGN, candidate.name() );
-                    tripoint seen_loc;
-                    // Show locations of seen robots, center on player if robot is not seen
-                    if( p->sees( candidate ) ) {
-                        seen_loc = candidate.pos();
-                    } else {
-                        seen_loc = p->pos();
-                    }
-                    locations.push_back( seen_loc );
-                }
-            }
-            if( mons.empty() ) {
-                p->add_msg_if_player( m_info, _( "No friendly robots in range." ) );
-                return it->type->charges_to_use();
-            }
-            pointmenu_cb callback( locations );
-            pick_robot.callback = &callback;
-            pick_robot.query();
-            if( pick_robot.ret < 0 || static_cast<size_t>( pick_robot.ret ) >= mons.size() ) {
-                p->add_msg_if_player( m_info, _( "Never mind" ) );
-                return it->type->charges_to_use();
-            }
-            const size_t mondex = pick_robot.ret;
-            shared_ptr_fast< monster > z = mons[mondex];
-
-            if( g->disable_robot( z->pos() ) ) {
-                p->add_msg_if_player( _( "You deactivated %s." ), z->name() );
-            }
-
-            return it->type->charges_to_use();
-
-        }
     }
     return 0;
 }
