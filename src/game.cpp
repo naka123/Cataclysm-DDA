@@ -5728,7 +5728,7 @@ void game::control_vehicle()
         }
     }
     if( veh != nullptr && veh->player_in_control( u ) &&
-        veh->avail_part_with_feature( veh_part, "CONTROLS", true ) >= 0 ) {
+        veh->avail_part_with_feature( veh_part, "CONTROLS" ) >= 0 ) {
         veh->use_controls( u.pos(), is_remote );
     } else if( veh && veh->player_in_control( u ) &&
                veh->avail_part_with_feature( veh_part, "CONTROL_ANIMAL" ) >= 0 ) {
