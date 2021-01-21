@@ -485,23 +485,32 @@ void vehicle::print_speed_gauge( const catacurses::window &win, const point &p, 
         spacing = 0;
     }
 
+    auto ndigits = []( int value ) {
+    return value == 0 ? 1 :
+            ( value > 0 ?
+                static_cast<int>( std::log10( static_cast<double>( std::abs( value ) ) ) ) + 1 :
+                static_cast<int>( std::log10( static_cast<double>( std::abs( value ) ) ) ) + 2 );
+    };
+
+
+    const float strain = this->strain();
+    nc_color col_vel = strain <= 0 ? c_light_blue :
+                    ( strain <= 0.2 ? c_yellow :
+                        ( strain <= 0.4 ? c_light_red : c_red ) );
+
     if( is_holonomic() ) {
         int c_speed = static_cast<int>( convert_velocity( velocity, VU_VEHICLE ) );
 
         const std::string type = get_option<std::string>( "USE_METRIC_SPEEDS" );
-        int offset = get_int_digits( c_speed );
-
-        nc_color col_vel = strain <= 0 ? c_light_blue :
-                           ( strain <= 0.2 ? c_yellow :
-                             ( strain <= 0.4 ? c_light_red : c_red ) );
+        int offset = ndigits( c_speed );
 
         nc_color col_omni = c_yellow;
         if( decoupled_on ) {
             col_omni = c_light_red;
         }
-        mvwprintz( w, p + point( 0, 0 ), col_omni, "OMNI" );
-        mvwprintz( w, point( offset, 0 ), col_vel, "%d", c_speed );
-        mvwprintz( w, point(  offset + 1, 0 ), c_light_gray, type );
+        mvwprintz( win, p + point( 0, 0 ), col_omni, "OMNI" );
+        mvwprintz( win, p + point( offset, 0 ), col_vel, "%d", c_speed );
+        mvwprintz( win, p + point( offset + 1, 0 ), c_light_gray, type );
 
         return;
     }
@@ -510,18 +519,8 @@ void vehicle::print_speed_gauge( const catacurses::window &win, const point &p, 
         return;
     }
 
-    const float strain = this->strain();
-    nc_color col_vel = strain <= 0 ? c_light_blue :
-                       ( strain <= 0.2 ? c_yellow :
-                         ( strain <= 0.4 ? c_light_red : c_red ) );
     int t_speed = static_cast<int>( convert_velocity( cruise_velocity, VU_VEHICLE ) );
     int c_speed = static_cast<int>( convert_velocity( velocity, VU_VEHICLE ) );
-    auto ndigits = []( int value ) {
-        return value == 0 ? 1 :
-               ( value > 0 ?
-                 static_cast<int>( std::log10( static_cast<double>( std::abs( value ) ) ) ) + 1 :
-                 static_cast<int>( std::log10( static_cast<double>( std::abs( value ) ) ) ) + 2 );
-    };
     const std::string type = get_option<std::string> ( "USE_METRIC_SPEEDS" );
     int t_offset = ndigits( t_speed );
     int c_offset = ndigits( c_speed );
