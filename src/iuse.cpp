@@ -8072,7 +8072,7 @@ static void sendRadioSignal( player &p, const flag_id &signal )
         for( item &it : here.i_at( loc ) ) {
             if( it.has_flag( flag_RADIO_ACTIVATION ) && it.has_flag( signal ) ) {
                 sounds::sound( p.pos(), 6, sounds::sound_t::alarm, _( "beep" ), true, "misc", "beep" );
-                if( it.has_flag( "BOMB" ) ) {
+                if( it.has_flag( flag_BOMB ) ) {
                     // Invoke to transform a radio-modded explosive into its active form
                     it.type->invoke( p, it, loc );
                     it.ammo_unset();
@@ -8087,7 +8087,7 @@ static void sendRadioSignal( player &p, const flag_id &signal )
                 if( itm != nullptr ) {
                     sounds::sound( p.pos(), 6, sounds::sound_t::alarm, _( "beep" ), true, "misc", "beep" );
                     // Invoke twice: first to transform, then later to proc
-                    if( itm->has_flag( "BOMB" ) ) {
+                    if( itm->has_flag( flag_BOMB ) ) {
                         itm->type->invoke( p, *itm, loc );
                         itm->ammo_unset();
                         // The type changed
