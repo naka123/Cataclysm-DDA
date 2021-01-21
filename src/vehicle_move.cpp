@@ -1486,10 +1486,10 @@ void vehicle::pldrive_holonomic( const tripoint &p )
         return;
     }
 
-    int turn_delta = 15 * -p.z;
+    units::angle turn_delta = 15_degrees * -p.z;
 
     const float handling_diff = handling_difficulty();
-    if( turn_delta != 0 && decoupled_on ) {
+    if( turn_delta != 0_degrees && decoupled_on ) {
         turn( turn_delta );
         cruise_velocity = 0;
         player_character.moves = 0;
@@ -1838,7 +1838,7 @@ vehicle *vehicle::act_on_map()
     }
 
     // HACK
-    if (face.dir() != face_desired.dir() && turn_dir == 0) {
+    if ( face.dir() != face_desired.dir() && turn_dir == 0_degrees ) {
         turn_dir = face_desired.dir();
     }
 
@@ -1861,12 +1861,12 @@ vehicle *vehicle::act_on_map()
     turn_cost = vehicles::vmiph_per_tile / std::max<float>( 0.0001f, std::abs( velocity ) );
     
     if( is_turning_inplace() ) {
-        int deg_to_turn = turn_dir - face.dir();
-        if (deg_to_turn >= 180) {
-            deg_to_turn -= 180;
+        units::angle deg_to_turn = turn_dir - face.dir();
+        if (deg_to_turn >= 180_degrees) {
+            deg_to_turn -= 180_degrees;
         }
-        else if (deg_to_turn <= -180) {
-            deg_to_turn += 180;
+        else if (deg_to_turn <= -180_degrees) {
+            deg_to_turn += 180_degrees;
         }
 
         const float deg_per_turn = 1 / 90.0f;
